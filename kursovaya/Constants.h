@@ -1,0 +1,51 @@
+#pragma once
+#include "SDL.h"
+
+
+const int M = 10;
+
+const int HEIGHT = 800;
+const int WIDTH = 960;
+
+const int WindX = 180;
+const int WindY = 125;
+const int WindYd = 75;
+
+//const int WindW = WIDTH - WindX * 2;
+const int WindH = HEIGHT - WindY - WindYd;
+const int WindW = WindH;
+// 600x600 размер окна
+
+extern SDL_Window* window;
+extern SDL_Renderer* renderer;
+extern SDL_Rect Windrect;
+
+
+extern int numWcells;
+extern int numHcells;
+
+const SDL_Rect WINDOWrect = { 0, 0, WIDTH, HEIGHT};
+const SDL_Rect BG3rect = { 0, 0, 990, HEIGHT };
+const SDL_Rect BG2rect = { -250, 0, 1334, HEIGHT };
+
+//const int CRATESIZE = WindW / numWcells;
+extern int CRATESIZE;
+
+const SDL_Rect MainText = {75, 200, WIDTH - WindX*2, 170};
+
+
+
+// «агрузка музыки
+//Mix_Music* fon = Mix_LoadMUS("music1.wav");
+// Mix_Chunk * sound = Mix_LoadWAV("boop.wav");
+
+// запуск //музыки
+//Mix_PlayMusic(fon, -1);
+// Mix_PlayChannel(-1, sound, 0);
+
+
+//#include "SDL.h"
+//#include "SDL_image.h"
+//#include "SDL_ttf.h"
+//#include "ImporterTools.h"
+//#include "SDL_mixer.h"
