@@ -1,6 +1,9 @@
 #pragma once
 #include "SDL.h"
+#include "Structs.h"
 
+#define PROJECT_LINK "C:/Users/SystemX/Desktop/kursovaya/kursovaya/"
+#define SPRITES_FOLDER "sprites/"
 
 const int M = 10;
 
@@ -25,7 +28,6 @@ extern int numWcells;
 extern int numHcells;
 
 const SDL_Rect WINDOWrect = { 0, 0, WIDTH, HEIGHT};
-const SDL_Rect BG3rect = { 0, 0, 990, HEIGHT };
 const SDL_Rect BG2rect = { -250, 0, 1334, HEIGHT };
 
 //const int CRATESIZE = WindW / numWcells;
@@ -33,7 +35,18 @@ extern int CRATESIZE;
 
 const SDL_Rect MainText = {75, 200, WIDTH - WindX*2, 170};
 
+extern int mouseX, mouseY;
 
+extern SDL_Event event;
+
+extern int state;
+
+extern int lvl;
+
+extern bool muteMUTED;
+extern bool musicMUTED;
+
+//extern numsTex ArrNums[10];
 
 // Загрузка музыки
 //Mix_Music* fon = Mix_LoadMUS("music1.wav");

@@ -15,25 +15,85 @@
 
 using namespace std;
 
-void drawlevels(numsTex Arr, numsTex ArrS)
+bool ActionLevels(numsTex* Arr)
 {
-	int mouseX, mouseY;
-	SDL_GetMouseState(&mouseX, &mouseY);
-	//if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect);
 	for (int i = 0; i < 10; i++)
 	{
-		// ñäåëàé îòðèñîâêó âñåõ êíîïîê âûáîðà óðîâíåé, ñ àíèìàöèåé íàâåäåíèÿ è ïåðåõîäàìè íà óðîâíè
+		if (ishit(Arr[i].rect, event.button.x, event.button.y)) { lvl = i + 1; return 1; }
 	}
+	return 0;
 }
 
+// çàãðóçêà òåêñòóð
+//
+SDL_Texture* BGtextureGame1 = createTexture("fon2.bmp");
+SDL_Texture* BGtextureMenu1 = createTexture("fon3.bmp");
+SDL_Texture* cratetexture = createTexture("crate.bmp");
+SDL_Texture* nametexture = createTexture("BRANCHES.bmp");
+SDL_Rect namerect = { 160, 200, 70 * M, 16 * M };
+SDL_Texture* CTAPTtexture = createTexture("CTAPT.bmp");
+SDL_Texture* CTAPTselectedtexture = createTexture("CTAPTselected.bmp");
+SDL_Rect CTAPTrect = { 26 * M, 20 * M + 20 * M, 50 * M, 16 * M };
+SDL_Texture* frametexture = createTexture("frame68.bmp", true);
+SDL_Rect framerect = { 140, 85, 68 * M, 68 * M };
+SDL_Texture* BGtexture3 = createTexture("bg3.bmp", true);
+SDL_Texture* returnTexture = createTexture("return.bmp", true);
+SDL_Texture* returnSelectedTexture = createTexture("returnSelected.bmp", true);
+SDL_Rect returnRect = { 30, 30, 16 * M, 16 * M };
+//
+SDL_Texture* br1na = createTexture("br1na.bmp", 1);
+SDL_Texture* br1ya = createTexture("br1ya.bmp", 1);
+SDL_Texture* br2na = createTexture("br2na.bmp", 1);
+SDL_Texture* br2ya = createTexture("br2ya.bmp", 1);
+SDL_Texture* br3na = createTexture("br3na.bmp", 1);
+SDL_Texture* br3ya = createTexture("br3ya.bmp", 1);
+SDL_Texture* br4na = createTexture("br4na.bmp", 1);
+SDL_Texture* br4ya = createTexture("br4ya.bmp", 1);
+SDL_Texture* brRoot = createTexture("brRoot.bmp", 1);
+SDL_Texture* brFlowerOpened = createTexture("brFlowerOpened.bmp", 1);
+SDL_Texture* brFlowerClosed = createTexture("brFlowerClosed.bmp", 1);
+//
+SDL_Texture* _0 = createTexture("0.bmp");
+SDL_Texture* _0s = createTexture("0s.bmp");
+SDL_Texture* _1 = createTexture("1.bmp");
+SDL_Texture* _1s = createTexture("1s.bmp");
+SDL_Texture* _2 = createTexture("2.bmp");
+SDL_Texture* _2s = createTexture("2s.bmp");
+SDL_Texture* _3 = createTexture("3.bmp");
+SDL_Texture* _3s = createTexture("3s.bmp");
+SDL_Texture* _4 = createTexture("4.bmp");
+SDL_Texture* _4s = createTexture("4s.bmp");
+SDL_Texture* _5 = createTexture("5.bmp");
+SDL_Texture* _5s = createTexture("5s.bmp");
+SDL_Texture* _6 = createTexture("6.bmp");
+SDL_Texture* _6s = createTexture("6s.bmp");
+SDL_Texture* _7 = createTexture("7.bmp");
+SDL_Texture* _7s = createTexture("7s.bmp");
+SDL_Texture* _8 = createTexture("8.bmp");
+SDL_Texture* _8s = createTexture("8s.bmp");
+SDL_Texture* _9 = createTexture("9.bmp");
+SDL_Texture* _9s = createTexture("9s.bmp");
+//
+SDL_Texture* mute = createTexture("mute.bmp");
+SDL_Texture* muteSelected = createTexture("muteSelected.bmp");
+SDL_Texture* muteMuted = createTexture("muteMuted.bmp");
+SDL_Texture* muteMutedSelected = createTexture("muteMutedSelected.bmp");
+SDL_Rect muteRect0 = { WIDTH - 160 - 30, 30, 16 * M, 16 * M };
+//
+SDL_Texture* music = createTexture("music.png");
+SDL_Texture* musicSelected = createTexture("musicSelected.png");
+SDL_Texture* musicMuted = createTexture("musicMuted.png");
+SDL_Texture* musicMutedSelected = createTexture("musicMutedSelected.png");
+SDL_Rect musicRect0 = { WIDTH - 160 * 2 - 30 * 2, 30, 16 * M, 16 * M };
 
 int main(int args, char** argv)
 {
 	setlocale(LC_ALL, "ru");
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-	IMG_Init(0);
+	IMG_Init(IMG_INIT_PNG);
 
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 	Mix_Init(0);
 	Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
@@ -45,138 +105,93 @@ int main(int args, char** argv)
 	SDL_Texture * mainnameTexture = get_text_texture(renderer, txt, my_font);
 	//
 	// Çàãðóçêà çâóêîâ
+	Mix_Music* fon = Mix_LoadMUS("Swimming.wav");
 	Mix_Chunk* click = Mix_LoadWAV("click.wav");
 	//
 
 	cell** Crates = ArrCreate2D_cell(numHcells, numWcells);
 
 
+
 	int m = 7;
 
 	SDL_Texture** ArrTexture = (SDL_Texture**)malloc(0 * sizeof(int));
 
-	// çàãðóçêà òåêñòóð
-	SDL_Texture* BGtextureGame1 = createTexture("fon2.bmp");
-	SDL_Texture* BGtextureMenu1 = createTexture("fon3.bmp");
-	SDL_Texture* cratetexture = createTexture("crate.bmp");
-	SDL_Texture* nametexture = createTexture("BRANCHES.bmp");
-	SDL_Rect namerect = { 160, 200, 70 * M, 16 * M };
-	SDL_Texture* CTAPTtexture = createTexture("CTAPT.bmp");
-	SDL_Texture* CTAPTselectedtexture = createTexture("CTAPTselected.bmp");
-	SDL_Rect CTAPTrect = {26*M, 20*M+ 20*M, 50*M, 16*M};
-	SDL_Texture* frametexture = createTexture("frame68.bmp", true);
-	SDL_Rect framerect = {140, 85, 68*M, 68*M};
-	SDL_Texture* BGtexture3 = createTexture("bg3.bmp", true);
-	SDL_Texture* returnTexture = createTexture("return.bmp", true);
-	SDL_Texture* returnSelectedTexture = createTexture("returnSelected.bmp", true);
-	SDL_Rect returnRect = {50, 50, 16*M, 16*M};
-
-	SDL_Texture* br1na = createTexture("br1na.bmp");
-	SDL_Texture* br1ya = createTexture("br1ya.bmp");
-	SDL_Texture* br2na = createTexture("br2na.bmp");
-	SDL_Texture* br2ya = createTexture("br2ya.bmp");
-	SDL_Texture* br3na = createTexture("br3na.bmp");
-	SDL_Texture* br3ya = createTexture("br3ya.bmp");
-	SDL_Texture* br4na = createTexture("br4na.bmp");
-	SDL_Texture* br4ya = createTexture("br4ya.bmp");
-	SDL_Texture* brRoot = createTexture("brRoot.bmp");
-	SDL_Texture* brFlowerOpened = createTexture("brFlowerOpened.bmp");
-	SDL_Texture* brFlowerClosed = createTexture("brFlowerClosed.bmp");
-
-	SDL_Texture* _0 = createTexture("0.bmp");
-	SDL_Texture* _0s = createTexture("0s.bmp");
-	SDL_Texture* _1  = createTexture("1.bmp");
-	SDL_Texture* _1s = createTexture("1s.bmp");
-	SDL_Texture* _2  = createTexture("2.bmp");
-	SDL_Texture* _2s = createTexture("2s.bmp");
-	SDL_Texture* _3 = createTexture("3.bmp");
-	SDL_Texture* _3s = createTexture("3s.bmp");
-	SDL_Texture* _4 = createTexture("4.bmp");
-	SDL_Texture* _4s = createTexture("4s.bmp");
-	SDL_Texture* _5 = createTexture("5.bmp");
-	SDL_Texture* _5s = createTexture("5s.bmp");
-	SDL_Texture* _6 = createTexture("6.bmp");
-	SDL_Texture* _6s = createTexture("6s.bmp");
-	SDL_Texture* _7 = createTexture("7.bmp");
-	SDL_Texture* _7s = createTexture("7s.bmp");
-	SDL_Texture* _8 = createTexture("8.bmp");
-	SDL_Texture* _8s = createTexture("8s.bmp");
-	SDL_Texture* _9 = createTexture("9.bmp");
-	SDL_Texture* _9s = createTexture("9s.bmp");
-
-
 	numsTex ArrNums[10];
+	int X = 70 - 160;
 	for (int i = 0; i < 10; i++)
 	{
+		X += 16 * M;
+		if (X > 800) X = 50;
 		ArrNums[i].rect.w = 16 * M;
 		ArrNums[i].rect.h = 16 * M;
-		ArrNums[i].rect.x = 50 + 16 * M * i;
-		if (i < 5) ArrNums[i].rect.y = 50 + 16 * M * i + 16 * M;
-		else ArrNums[i].rect.y = 50 + 16 * M * i + 16 * M * 2;
+		ArrNums[i].rect.x = X;
+		if (i < 5) ArrNums[i].rect.y = 50 + 16 * M * 1.5;
+		else ArrNums[i].rect.y = 50 + 16 * M * 2.5 + M;
 
 		switch (i)
 		{
-		case 0: ArrNums[i].texture = _1; break;
-		case 1: ArrNums[i].texture = _2; break;
-		case 2: ArrNums[i].texture = _3; break;
-		case 3: ArrNums[i].texture = _4; break;
-		case 4: ArrNums[i].texture = _5; break;
-		case 5: ArrNums[i].texture = _6; break;
-		case 6: ArrNums[i].texture = _7; break;
-		case 7: ArrNums[i].texture = _8; break;
-		case 8: ArrNums[i].texture = _9; break;
-		case 9: ArrNums[i].texture = _0; break;
+		case 0: { ArrNums[i].texture = _1; ArrNums[i].textureSelected = _1s; break; }
+		case 1: { ArrNums[i].texture = _2; ArrNums[i].textureSelected = _2s; break; }
+		case 2: { ArrNums[i].texture = _3; ArrNums[i].textureSelected = _3s; break; }
+		case 3: { ArrNums[i].texture = _4; ArrNums[i].textureSelected = _4s; break; }
+		case 4: { ArrNums[i].texture = _5; ArrNums[i].textureSelected = _5s; break; }
+		case 5: { ArrNums[i].texture = _6; ArrNums[i].textureSelected = _6s; break; }
+		case 6: { ArrNums[i].texture = _7; ArrNums[i].textureSelected = _7s; break; }
+		case 7: { ArrNums[i].texture = _8; ArrNums[i].textureSelected = _8s; break; }
+		case 8: { ArrNums[i].texture = _9; ArrNums[i].textureSelected = _9s; break; }
+		case 9: { ArrNums[i].texture = _0; ArrNums[i].textureSelected = _0s; break; }
 		}
-	}
-
-	numsTex ArrNumsS[10];
-	for (int i = 0; i < 10; i++)
-	{
-		ArrNumsS[i].rect.w = 16 * M;
-		ArrNumsS[i].rect.h = 16 * M;
-		ArrNumsS[i].rect.x = 50 + 16 * M * i;
-		if (i < 5) ArrNumsS[i].rect.y = 50 + 16 * M * i + 16 * M;
-		else ArrNumsS[i].rect.y = 50 + 16 * M * i + 16 * M * 2;
-
-		switch (i)
-		{
-		case 0: ArrNumsS[i].texture = _1s; break;
-		case 1: ArrNumsS[i].texture = _2s; break;
-		case 2: ArrNumsS[i].texture = _3s; break;
-		case 3: ArrNumsS[i].texture = _4s; break;
-		case 4: ArrNumsS[i].texture = _5s; break;
-		case 5: ArrNumsS[i].texture = _6s; break;
-		case 6: ArrNumsS[i].texture = _7s; break;
-		case 7: ArrNumsS[i].texture = _8s; break;
-		case 8: ArrNumsS[i].texture = _9s; break;
-		case 9: ArrNumsS[i].texture = _0s; break;
-		}
+		X += 10;
 	}
 
 	//
 
 	initCrates(Crates, br4ya, numWcells, numHcells);
 
-	SDL_Event event;
 
-	int state = 0;
-	int lvl = 0;
+
+
+	
+	Mix_PlayMusic(fon, -1);
 
 	bool IS_EXECUTE = true;
 	while (IS_EXECUTE)
 	{
 		if (SDL_PollEvent(&event)) if (event.type == SDL_QUIT) { IS_EXECUTE = false; break; }
 
+		SDL_GetMouseState(&mouseX, &mouseY);
+
 		// ÃËÀÂÍÎÅ ÌÅÍÞ
 		if (state == 0)
 		{
 
+			// ÑÍÀ×ÀËÀ ÔÎÍ À ÏÎÒÎÌ ÎÑÒÀËÜÍÎÅ
+			SDL_RenderCopy(renderer, BGtexture3, NULL, &WINDOWrect);
+
+			SDL_RenderCopy(renderer, nametexture, NULL, &namerect);
+
+			// ÙÅË×ÊÈ ÏÎ ÊÍÎÏÊÀÌ
+
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
+				// ÑÒÀÐÒ ÊÍÎÏÊÀ
 				if (ishit(CTAPTrect, event.button.x, event.button.y))
 				{
-					Mix_PlayChannel(-1, click, 0);
+					PlaySound(click, muteMUTED);
 					state = 1;
+				}
+				// MUTE ÊÍÎÏÊÀ
+				else if (ishit(muteRect0, event.button.x, event.button.y))
+				{
+					muteMUTED = !muteMUTED;
+				}
+				// MUSIC ÊÍÎÏÊÀ
+				else if (ishit(musicRect0, event.button.x, event.button.y))
+				{
+					musicMUTED = !musicMUTED;
+					if (musicMUTED) Mix_PauseMusic();
+					else Mix_ResumeMusic();
 				}
 			}
 			else if ((event.type == SDL_KEYDOWN))
@@ -185,18 +200,35 @@ int main(int args, char** argv)
 				if (event.key.keysym.sym == SDLK_DOWN) state = 0;
 				
 			}
-			 
 
-			// ÑÍÀ×ÀËÀ ÔÎÍ À ÏÎÒÎÌ ÎÑÒÀËÜÍÎÅ
-			SDL_RenderCopy(renderer, BGtexture3, NULL, &BG3rect);
+			// ÀÍÈÌÀÖÈÈ ÍÀÂÅÄÅÍÈß
 
-			SDL_RenderCopy(renderer, nametexture, NULL, &namerect);
-
-			int mouseX, mouseY;
-			SDL_GetMouseState(&mouseX, &mouseY);
+			// ÊÍÎÏÊÀ ÑÒÀÐÒ
 			if (ishit(CTAPTrect, mouseX, mouseY)) SDL_RenderCopy(renderer, CTAPTselectedtexture, NULL, &CTAPTrect);
 			else SDL_RenderCopy(renderer, CTAPTtexture, NULL, &CTAPTrect);
-
+			// ÊÍÎÏÊÀ ÌÜÞÒ
+			if (!muteMUTED)
+			{
+				if (ishit(muteRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, muteSelected, NULL, &muteRect0);
+				else SDL_RenderCopy(renderer, mute, NULL, &muteRect0);
+			}
+			else
+			{
+				if (ishit(muteRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, muteMutedSelected, NULL, &muteRect0);
+				else SDL_RenderCopy(renderer, muteMuted, NULL, &muteRect0);
+			}
+			// ÊÍÎÏÊÀ MUSIC
+			if (!musicMUTED)
+			{
+				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicSelected, NULL, &musicRect0);
+				else SDL_RenderCopy(renderer, music, NULL, &musicRect0);
+			}
+			else
+			{
+				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect0);
+				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect0);
+			}
+			
 			//SDL_RenderCopy(renderer, mainnameTexture, NULL, &MainText);
 
 		}
@@ -204,21 +236,56 @@ int main(int args, char** argv)
 		// ÌÅÍÞ ÂÛÁÎÐÀ ÓÐÎÂÍß
 		else if (state == 1)
 		{
-			SDL_RenderCopy(renderer, BGtextureMenu1, NULL, &BG3rect);
+			SDL_RenderCopy(renderer, BGtextureMenu1, NULL, &WINDOWrect);
 
-			SDL_RenderCopy(renderer, returnTexture, NULL, &returnRect);
+			drawlevels(ArrNums);
+
+			// ÙÅË×ÊÈ ÏÎ ÊÍÎÏÊÀÌ
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
-				if (ishit(returnRect, event.button.x, event.button.y)) { Mix_PlayChannel(-1, click, 0); state = 0; }
+				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click, muteMUTED); state = 0; }
+				else if (ishit(muteRect0, event.button.x, event.button.y))
+				{
+					muteMUTED = !muteMUTED;
+				}
+				else if (ishit(musicRect0, event.button.x, event.button.y))
+				{
+					musicMUTED = !musicMUTED;
+					if (musicMUTED) Mix_PauseMusic();
+					else Mix_ResumeMusic();
+				}
+				else if (ActionLevels(ArrNums)) { PlaySound(click, muteMUTED);  state = 2; }
 			}
 
-			int mouseX, mouseY;
-			SDL_GetMouseState(&mouseX, &mouseY);
+
+			// ÀÍÈÌÀÖÈÈ ÍÀÂÅÄÅÍÈß
+			
+			// ÊÍÎÏÊÀ RETURN
 			if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect);
-			//else SDL_RenderCopy(renderer, returnTexture, NULL, &returnRect);
-
-
+			else SDL_RenderCopy(renderer, returnTexture, NULL, &returnRect);
+			// ÊÍÎÏÊÀ MUTE
+			if (!muteMUTED)
+			{
+				if (ishit(muteRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, muteSelected, NULL, &muteRect0);
+				else SDL_RenderCopy(renderer, mute, NULL, &muteRect0);
+			}
+			else
+			{
+				if (ishit(muteRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, muteMutedSelected, NULL, &muteRect0);
+				else SDL_RenderCopy(renderer, muteMuted, NULL, &muteRect0);
+			}
+			// ÊÍÎÏÊÀ MUSIC
+			if (!musicMUTED)
+			{
+				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicSelected, NULL, &musicRect0);
+				else SDL_RenderCopy(renderer, music, NULL, &musicRect0);
+			}
+			else
+			{
+				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect0);
+				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect0);
+			}
 		}
 
 		// ÑÀÌÀ ÈÃÐÀ
@@ -227,20 +294,64 @@ int main(int args, char** argv)
 			// êîíñîëü
 			ArrOutput2D_cells(Crates, numHcells, numWcells);
 			cout << "\n";
+			SDL_Delay(16);
+			system("cls");
 			///
 
 			SDL_RenderCopy(renderer, BGtextureGame1, NULL, &BG2rect);
 
-			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
-			SDL_RenderDrawRect(renderer, &Windrect);
-
 			SDL_RenderCopy(renderer, frametexture, NULL, &framerect);
+
+			SDL_RenderCopy(renderer, BGtexture3, NULL, &Windrect);
+
 
 			// ðèñîâêà âñåãî
 			drawCrates(renderer, Crates, numWcells, numHcells);
 
-			SDL_Delay(20);
-			system("cls");
+			// ÙÅË×ÊÈ ÏÎ ÊÍÎÏÊÀÌ
+
+			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
+			{
+				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click, muteMUTED); state = 1; }
+				else if (ishit(muteRect0, event.button.x, event.button.y))
+				{
+					muteMUTED = !muteMUTED;
+				}
+				else if (ishit(musicRect0, event.button.x, event.button.y))
+				{
+					musicMUTED = !musicMUTED;
+					if (musicMUTED) Mix_PauseMusic();
+					else Mix_ResumeMusic();
+				}
+			}
+
+			// ÀÍÈÌÀÖÈÈ ÍÀÂÅÄÅÍÈß
+
+			// ÊÍÎÏÊÀ RETURN
+			if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect);
+			else SDL_RenderCopy(renderer, returnTexture, NULL, &returnRect);
+			// ÊÍÎÏÊÀ MUTE
+			if (!muteMUTED)
+			{
+				if (ishit(muteRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, muteSelected, NULL, &muteRect0);
+				else SDL_RenderCopy(renderer, mute, NULL, &muteRect0);
+			}
+			else
+			{
+				if (ishit(muteRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, muteMutedSelected, NULL, &muteRect0);
+				else SDL_RenderCopy(renderer, muteMuted, NULL, &muteRect0);
+			}
+			// ÊÍÎÏÊÀ MUSIC
+			if (!musicMUTED)
+			{
+				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicSelected, NULL, &musicRect0);
+				else SDL_RenderCopy(renderer, music, NULL, &musicRect0);
+			}
+			else
+			{
+				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect0);
+				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect0);
+			}
 		}
 
 		SDL_RenderPresent(renderer);
@@ -250,6 +361,16 @@ int main(int args, char** argv)
 
 	
 	SDL_DestroyTexture(mainnameTexture);
+
+	SDL_DestroyTexture(music);
+	SDL_DestroyTexture(musicSelected);
+	SDL_DestroyTexture(musicMuted);
+	SDL_DestroyTexture(musicMutedSelected);
+
+	SDL_DestroyTexture(mute);
+	SDL_DestroyTexture(muteSelected);
+	SDL_DestroyTexture(muteMuted);
+	SDL_DestroyTexture(muteMutedSelected);
 
 	SDL_DestroyTexture(_0);
 	SDL_DestroyTexture(_0s);

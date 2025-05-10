@@ -1,14 +1,21 @@
 #include "ImporterTools.h"
 #include "Constants.h"
+#include <string>
 
 SDL_Texture* createTexture(const char* name, bool delBG)
 {
-	SDL_Surface* Image = IMG_Load(name);
+	char fullname[100] = "";
+
+	strcpy_s(fullname, PROJECT_LINK); // копируем ссылку на проект в фулнэйм
+	strcat_s(fullname, SPRITES_FOLDER); // ссылка на папку с текстурами
+	strcat_s(fullname, name); // название файла
+	
+	SDL_Surface* Image = IMG_Load(fullname);
 	if (delBG) SDL_SetColorKey(Image, SDL_TRUE, SDL_MapRGB(Image->format, 255, 255, 255));
-	SDL_Texture* BackGround = SDL_CreateTextureFromSurface(renderer, Image);
+	SDL_Texture* Texture = SDL_CreateTextureFromSurface(renderer, Image);
 	SDL_FreeSurface(Image);
 
-	return BackGround;
+	return Texture;
 }
 
 SDL_Texture* get_text_texture(SDL_Renderer*& renderer, char* text, TTF_Font* font)
@@ -22,5 +29,3 @@ SDL_Texture* get_text_texture(SDL_Renderer*& renderer, char* text, TTF_Font* fon
 	SDL_FreeSurface(textSurface);
 	return texture;
 }
-
-

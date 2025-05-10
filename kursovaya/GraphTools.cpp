@@ -33,3 +33,18 @@ bool ishit(SDL_Rect rect, int x, int y)
 			return true;
 	return false;
 }
+
+void PlaySound(Mix_Chunk* sound, bool MUTED)
+{
+	if (!MUTED) Mix_PlayChannel(-1, sound, 0);
+}
+
+void drawlevels(numsTex* Arr)
+{
+	//if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect);
+	for (int i = 0; i < 10; i++)
+	{
+		if (ishit(Arr[i].rect, mouseX, mouseY)) SDL_RenderCopy(renderer, Arr[i].textureSelected, NULL, &Arr[i].rect);
+		else SDL_RenderCopy(renderer, Arr[i].texture, NULL, &Arr[i].rect);
+	}
+}
