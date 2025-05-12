@@ -82,7 +82,8 @@ int main(int args, char** argv)
 
 	initCrates(Crates);
 
-
+	//изначальная проверка заспавневшихся веток на активацию
+	RefreshBranches(Crates);
 
 
 	
@@ -256,8 +257,6 @@ int main(int args, char** argv)
 			SDL_RenderCopy(renderer, frametexture, NULL, &framerect);
 			SDL_RenderCopy(renderer, BGtexture3, NULL, &Windrect);
 			drawCrates(Crates);
-
-
 			// ЩЕЛЧКИ ПО КНОПКАМ
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
@@ -275,17 +274,6 @@ int main(int args, char** argv)
 				}
 				else ActionBranches(Crates);
 			}
-
-			// ИГРОВАЯ ЛОГИКА
-
-
-			//for (int i = 0; i < numWcells; i++)
-			//{
-			//	for (int j = 0; j < numHcells; j++)
-			//	{
-			//	}
-			//}
-
 
 
 			// АНИМАЦИИ НАВЕДЕНИЯ

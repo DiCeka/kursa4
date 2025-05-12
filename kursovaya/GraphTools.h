@@ -28,7 +28,9 @@ bool CheckActiveBranches(cell** Crates, int i, int j);
 
 void ActivationFromRoot(cell** Crates, int i, int j, int dir);
 
-void TurnOffAllBranches(cell** Crates);
+void RefreshBranches(cell** Crates);
+
+void TurnOffAllBranches(cell** Crates);	
 
 bool CheckAround(cell** Crates, int i, int j);
 

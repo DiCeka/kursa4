@@ -190,6 +190,25 @@ void ActionBranches(cell** Crates)
 	}
 }
 
+void RefreshBranches(cell** Crates)
+{
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			TurnOffAllBranches(Crates);
+			for (int ii = 0; ii < numWcells; ii++)
+			{
+				for (int jj = 0; jj < numHcells; jj++)
+				{
+					if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, (Crates[ii][jj].rotation + 2) % 4);
+				}
+			}
+			NeedTo_();
+		}
+	}
+}
+
 void TurnOffAllBranches(cell** Crates)
 {
 	for (int i = 0; i < numWcells; i++)
