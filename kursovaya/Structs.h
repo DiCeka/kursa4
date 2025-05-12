@@ -5,7 +5,10 @@ struct cell
 {
 	int texturetype;
 	SDL_Texture* texture;
-	SDL_Rect rect;	
+	SDL_Rect rect;
+	int rotation;
+	bool IsActive;
+	bool ways[4] = {0};
 };
 
 struct numsTex

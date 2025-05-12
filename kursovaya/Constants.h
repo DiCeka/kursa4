@@ -1,8 +1,8 @@
 #pragma once
 #include "SDL.h"
 #include "Structs.h"
+#include "ImporterTools.h"
 
-#define PROJECT_LINK "C:/Users/SystemX/Desktop/kursovaya/kursovaya/"
 #define SPRITES_FOLDER "sprites/"
 
 const int M = 10;
@@ -46,6 +46,16 @@ extern int lvl;
 extern bool muteMUTED;
 extern bool musicMUTED;
 
+extern bool NeedToChangeConsole;
+
+extern bool NeedToRefreshCrates;
+
+extern int TexturesLvl1[5][5];
+
+extern int RotatesLvl1[5][5];
+
+
+
 //extern numsTex ArrNums[10];
 
 // Загрузка музыки
@@ -56,9 +66,3 @@ extern bool musicMUTED;
 //Mix_PlayMusic(fon, -1);
 // Mix_PlayChannel(-1, sound, 0);
 
-
-//#include "SDL.h"
-//#include "SDL_image.h"
-//#include "SDL_ttf.h"
-//#include "ImporterTools.h"
-//#include "SDL_mixer.h"

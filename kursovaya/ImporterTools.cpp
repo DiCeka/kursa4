@@ -1,3 +1,4 @@
+#pragma once
 #include "ImporterTools.h"
 #include "Constants.h"
 #include <string>
@@ -6,7 +7,6 @@ SDL_Texture* createTexture(const char* name, bool delBG)
 {
 	char fullname[100] = "";
 
-	strcpy_s(fullname, PROJECT_LINK); // копируем ссылку на проект в фулнэйм
 	strcat_s(fullname, SPRITES_FOLDER); // ссылка на папку с текстурами
 	strcat_s(fullname, name); // название файла
 	

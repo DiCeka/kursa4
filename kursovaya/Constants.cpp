@@ -1,3 +1,4 @@
+#pragma once
 #include "Constants.h"
 
 SDL_Window* window = SDL_CreateWindow(u8"Ветки",
@@ -25,34 +26,32 @@ int lvl = 0;
 bool muteMUTED = false;
 bool musicMUTED = false;
 
-//void LvlsArrInit()
-//{
-//	int X = 70 - 160;
-//	for (int i = 0; i < 10; i++)
-//	{
-//		X += 16 * M;
-//		if (X > 800) X = 50;
-//		ArrNums[i].rect.w = 16 * M;
-//		ArrNums[i].rect.h = 16 * M;
-//		ArrNums[i].rect.x = X;
-//		if (i < 5) ArrNums[i].rect.y = 50 + 16 * M * 1.5;
-//		else ArrNums[i].rect.y = 50 + 16 * M * 2.5 + M;
-//
-//		switch (i)
-//		{
-//		case 0: { ArrNums[i].texture = _1; ArrNums[i].textureSelected = _1s; break; }
-//		case 1: { ArrNums[i].texture = _2; ArrNums[i].textureSelected = _2s; break; }
-//		case 2: { ArrNums[i].texture = _3; ArrNums[i].textureSelected = _3s; break; }
-//		case 3: { ArrNums[i].texture = _4; ArrNums[i].textureSelected = _4s; break; }
-//		case 4: { ArrNums[i].texture = _5; ArrNums[i].textureSelected = _5s; break; }
-//		case 5: { ArrNums[i].texture = _6; ArrNums[i].textureSelected = _6s; break; }
-//		case 6: { ArrNums[i].texture = _7; ArrNums[i].textureSelected = _7s; break; }
-//		case 7: { ArrNums[i].texture = _8; ArrNums[i].textureSelected = _8s; break; }
-//		case 8: { ArrNums[i].texture = _9; ArrNums[i].textureSelected = _9s; break; }
-//		case 9: { ArrNums[i].texture = _0; ArrNums[i].textureSelected = _0s; break; }
-//		}
-//		X += 10;
-//	}
-//}
-//numsTex ArrNums[10];
+bool NeedToChangeConsole = true;
+
+bool NeedToRefreshCrates = true;
+
+int TexturesLvl1[5][5] = {
+	{5, 5, 3, 1, 5},
+	{1, 0, 2, 2, 0},
+	{1, 0, 0, 3, 5},
+	{3, 3, 1, 2, 0},
+	{6, 2, 1, 1, 5}
+};
+
+//int TexturesLvl1[5][5] = {
+//	{2, 2, 2, 2, 6},
+//	{1, 1, 1, 1, 1},
+//	{1, 1, 1, 1, 1},
+//	{1, 1, 1, 1, 1},
+//	{5, 2, 2, 2, 2}
+//};
+
+int RotatesLvl1[5][5] = {
+	{0, 3, 1, 1, 1},
+	{0, 0, 3, 1, 0},
+	{0, 0, 0, 0, 1},
+	{3, 1, 1, 2, 0},
+	{1, 0, 0, 0, 0}
+};
+
 

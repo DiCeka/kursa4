@@ -1,3 +1,4 @@
+#pragma once
 #include "ArrayTools.h"
 
 
@@ -13,13 +14,13 @@ int** ArrCreate2D_int(int rows, int cols)
     return a;
 }
 
-cell** ArrCreate2D_cell(int rows, int cols)
+cell** ArrCreate2D_cell()
 {
-    cell** a = new cell* [rows];
+    cell** a = new cell* [numHcells];
 
-    for (int i = 0; i < rows; i++)
+    for (int i = 0; i < numWcells; i++)
     {
-        a[i] = new cell[cols];
+        a[i] = new cell[numWcells];
     }
 
     return a;
@@ -39,13 +40,20 @@ void ArrDelete2D_int(int** a, int m) {
     delete[] a;
 }
 
-void ArrOutput2D_cells(cell** a, int rows, int cols)
+void ArrOutput2D_cells(cell** a, int data)
 {
-    for (int i = 0; i < rows; i++)
+
+    for (int i = 0; i < numHcells; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j = 0; j < numWcells; j++)
         {
-            cout << a[i][j].texturetype << " ";
+            switch (data)
+            {
+            case 1: cout << a[i][j].texturetype << " "; break;
+            case 2: cout << a[i][j].rotation << " "; break;
+            case 3: cout << a[i][j].IsActive << " "; break;
+            case 4: cout << a[i][j].ways[0] << " "; break;
+            }
         }
         cout << "\n";
     }
