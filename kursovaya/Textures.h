@@ -71,3 +71,19 @@ extern SDL_Rect musicRect0;
 extern SDL_Rect musicRect2;
 
 extern SDL_Texture* none;
+
+extern SDL_Rect LevelRect;
+extern SDL_Rect MiniNumRect;
+extern SDL_Rect MiniNumRect10;
+
+extern SDL_Texture* level;
+extern SDL_Texture* mini1;
+extern SDL_Texture* mini2;
+extern SDL_Texture* mini3;
+extern SDL_Texture* mini4;
+extern SDL_Texture* mini5;
+extern SDL_Texture* mini6;
+extern SDL_Texture* mini7;
+extern SDL_Texture* mini8;
+extern SDL_Texture* mini9;
+extern SDL_Texture* mini10;

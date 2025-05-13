@@ -12,7 +12,7 @@ SDL_Texture* CTAPTtexture = createTexture("CTAPT.bmp");
 SDL_Texture* CTAPTselectedtexture = createTexture("CTAPTselected.bmp");
 SDL_Rect CTAPTrect = { 26 * M, 20 * M + 20 * M, 50 * M, 16 * M };
 SDL_Texture* frametexture = createTexture("frame68.bmp", true);
-SDL_Rect framerect = { 140, 85, 68 * M, 68 * M };
+SDL_Rect framerect = { 140, 90, 68 * M, 68 * M };
 SDL_Texture* BGtexture3 = createTexture("bg3.bmp", true);
 SDL_Texture* returnTexture = createTexture("return.bmp", true);
 SDL_Texture* returnSelectedTexture = createTexture("returnSelected.bmp", true);
@@ -31,8 +31,8 @@ SDL_Texture* brRoot = createTexture("brRoot.bmp", 1);
 SDL_Texture* brFlower = createTexture("brFlower.bmp", 1);
 SDL_Texture* brFlowerna = createTexture("brFlowerna.bmp", 1);
 //
-SDL_Texture* _0 = createTexture("0.bmp");
-SDL_Texture* _0s = createTexture("0s.bmp");
+SDL_Texture* _0 = createTexture("0.png");
+SDL_Texture* _0s = createTexture("0s.png");
 SDL_Texture* _1 = createTexture("1.bmp");
 SDL_Texture* _1s = createTexture("1s.bmp");
 SDL_Texture* _2 = createTexture("2.bmp");
@@ -57,13 +57,29 @@ SDL_Texture* muteSelected = createTexture("muteSelected.bmp");
 SDL_Texture* muteMuted = createTexture("muteMuted.bmp");
 SDL_Texture* muteMutedSelected = createTexture("muteMutedSelected.bmp");
 SDL_Rect muteRect0 = { WIDTH - 160 - 30, 30, 16 * M, 16 * M };
-SDL_Rect muteRect2 = { WIDTH - 160 - 10, 30 + 160 + 10, 16 * M, 16 * M };
+SDL_Rect muteRect2 = { WIDTH - 160 - 10, 10 + 160 + 10, 16 * M, 16 * M };
 //
 SDL_Texture* music = createTexture("music.png");
 SDL_Texture* musicSelected = createTexture("musicSelected.png");
 SDL_Texture* musicMuted = createTexture("musicMuted.png");
 SDL_Texture* musicMutedSelected = createTexture("musicMutedSelected.png");
 SDL_Rect musicRect0 = { WIDTH - 160 * 2 - 30 * 2, 30, 16 * M, 16 * M };
-SDL_Rect musicRect2 = { WIDTH - 160 - 10, 30, 16 * M, 16 * M };
+SDL_Rect musicRect2 = { WIDTH - 160 - 10, 10, 16 * M, 16 * M };
+//
+SDL_Rect LevelRect = {Windrect.x+Windrect.w/2 - (35*M/2-5), 20, 35*M, 8*M};
+SDL_Rect MiniNumRect = {LevelRect.x + 270, 4*M, 3*M, 5*M};
+SDL_Rect MiniNumRect10 = { LevelRect.x + 260, 4*M, 6 * M, 5 * M };
+
+SDL_Texture* level = createTexture("level35x8.png");
+SDL_Texture* mini1 = createTexture("1n.png");
+SDL_Texture* mini2 = createTexture("2n.png");
+SDL_Texture* mini3 = createTexture("3n.png");
+SDL_Texture* mini4 = createTexture("4n.png");
+SDL_Texture* mini5 = createTexture("5n.png");
+SDL_Texture* mini6 = createTexture("6n.png");
+SDL_Texture* mini7 = createTexture("7n.png");
+SDL_Texture* mini8 = createTexture("8n.png");
+SDL_Texture* mini9 = createTexture("9n.png");
+SDL_Texture* mini10 = createTexture("10n.png");
 
 SDL_Texture* none = createTexture("none.png", true);

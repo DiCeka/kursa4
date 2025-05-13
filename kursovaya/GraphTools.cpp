@@ -3,16 +3,19 @@
 
 
 
-void initCrates(cell** Crates)
+void initCrates(cell** Crates, int lvl)
 {
-
+	CntFlowers = 0;
+	numWcells = numHcells = LvlSizes[lvl];
+	CRATESIZE = WindW / numWcells;
 	for (int i = 0; i < numWcells; i++)
 	{
 		for (int j = 0; j < numHcells; j++)
 		{
-
 			Crates[i][j].rect = {WindX + j * CRATESIZE, WindY + i * CRATESIZE, CRATESIZE, CRATESIZE};
-			Crates[i][j].texturetype = TexturesLvl1[i][j];
+			Crates[i][j].texturetype = TexturesLvls[lvl-1][i][j];
+			if (Crates[i][j].texturetype != 0) Crates[i][j].rotation = rand()%4;
+			else Crates[i][j].rotation = 0;
 			Crates[i][j].IsActive = 0;
 			for (int k = 0; k < 4; k++)
 				Crates[i][j].ways[k] = 0;
@@ -54,6 +57,7 @@ void initCrates(cell** Crates)
 			{ 
 				Crates[i][j].texture = brFlowerna; 
 				Crates[i][j].ways[2] = 1;
+				CntFlowers++;
 				break; 
 			}
 			case 6: 
@@ -63,7 +67,6 @@ void initCrates(cell** Crates)
 				Crates[i][j].ways[2] = 1;
 				break; }
 			}
-			Crates[i][j].rotation = RotatesLvl1[i][j];
 			for (int h = 0; h < Crates[i][j].rotation; h++) Rotate(Crates[i][j].ways);
 		}
 	}
@@ -135,9 +138,9 @@ bool ishit(SDL_Rect rect, int x, int y)
 	return false;
 }
 
-void PlaySound(Mix_Chunk* sound, bool MUTED)
+void PlaySound(Mix_Chunk* sound)
 {
-	if (!MUTED) Mix_PlayChannel(-1, sound, 0);
+	if (!muteMUTED) Mix_PlayChannel(-1, sound, 0);
 }
 
 void drawlevels(numsTex* Arr)
@@ -147,6 +150,8 @@ void drawlevels(numsTex* Arr)
 	{
 		if (ishit(Arr[i].rect, mouseX, mouseY)) SDL_RenderCopy(renderer, Arr[i].textureSelected, NULL, &Arr[i].rect);
 		else SDL_RenderCopy(renderer, Arr[i].texture, NULL, &Arr[i].rect);
+
+		if (lvlcompleted[i+1]) { SDL_SetRenderDrawColor(renderer, 200, 200, 0, 100);  SDL_RenderFillRect(renderer, &Arr[i].rect); }
 	}
 }
 
@@ -181,8 +186,6 @@ void ActionBranches(cell** Crates)
 					}
 				}
 			}
-			
-
 			//if (CheckActiveBranches(Crates, i, j)) Crates[i][j].IsActive = 1;
 			//else Crates[i][j].IsActive = 0;
 			NeedTo_();
@@ -282,7 +285,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	{
 	case 0:
 	{
-		if (CheckUp(Crates, i, j))
+		if ( (CheckUp(Crates, i, j)) && !Crates[i-1][j].IsActive)
 		{
 			Crates[i - 1][j].IsActive = 1;
 			for (int k = 0; k < 4; k++)
@@ -295,7 +298,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	}
 	case 1:
 	{
-		if (CheckRight(Crates, i, j))
+		if ((CheckRight(Crates, i, j)) && !Crates[i][j+1].IsActive)
 		{
 			Crates[i][j + 1].IsActive = 1;
 			for (int k = 0; k < 4; k++)
@@ -308,7 +311,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	}
 	case 2:
 	{
-		if (CheckDown(Crates, i, j))
+		if ((CheckDown(Crates, i, j)) && !Crates[i + 1][j].IsActive)
 		{
 			Crates[i + 1][j].IsActive = 1;
 			for (int k = 0; k < 4; k++)
@@ -321,7 +324,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	}
 	case 3:
 	{
-		if (CheckLeft(Crates, i, j))
+		if ((CheckLeft(Crates, i, j)) && !Crates[i][j-1].IsActive)
 		{
 			Crates[i][j - 1].IsActive = 1;
 			for (int k = 0; k < 4; k++)

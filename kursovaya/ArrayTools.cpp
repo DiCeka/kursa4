@@ -16,11 +16,16 @@ int** ArrCreate2D_int(int rows, int cols)
 
 cell** ArrCreate2D_cell()
 {
-    cell** a = new cell* [numHcells];
-
-    for (int i = 0; i < numWcells; i++)
+    int mx = 0;
+    for (int i = 0; i < 11; i++)
     {
-        a[i] = new cell[numWcells];
+        if (mx < LvlSizes[i]) mx = LvlSizes[i];
+    }
+    cell** a = new cell* [mx]; // тут был numHcells, дальше везде numWcells
+
+    for (int i = 0; i < mx; i++)
+    {
+        a[i] = new cell[mx];
     }
 
     return a;

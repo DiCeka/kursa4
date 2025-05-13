@@ -37,6 +37,7 @@ int main(int args, char** argv)
 	// Загрузка звуков
 	Mix_Music* fon = Mix_LoadMUS("Swimming.wav");
 	Mix_Chunk* click = Mix_LoadWAV("click.wav");
+	Mix_Chunk* winsound = Mix_LoadWAV("winsound.wav");
 	//
 
 	cell** Crates = ArrCreate2D_cell();
@@ -78,13 +79,6 @@ int main(int args, char** argv)
 		X += 10;
 	}
 
-	//
-
-	initCrates(Crates);
-
-	//изначальная проверка заспавневшихся веток на активацию
-	RefreshBranches(Crates);
-
 
 	
 	Mix_PlayMusic(fon, -1);
@@ -95,6 +89,14 @@ int main(int args, char** argv)
 		if (SDL_PollEvent(&event)) if (event.type == SDL_QUIT) { IS_EXECUTE = false; break; }
 
 		SDL_GetMouseState(&mouseX, &mouseY);
+		if (WIN)
+		{
+			if (FP)
+				Pro3++;
+			else Pro3--;
+			if (Pro3 == 200) FP = 0;
+			else if (Pro3 == 100) FP = 1;
+		}
 
 		// ГЛАВНОЕ МЕНЮ
 		if (state == 0)
@@ -112,7 +114,7 @@ int main(int args, char** argv)
 				// СТАРТ КНОПКА
 				if (ishit(CTAPTrect, event.button.x, event.button.y))
 				{
-					PlaySound(click, muteMUTED);
+					PlaySound(click);
 					state = 1;
 				}
 				// MUTE КНОПКА
@@ -178,7 +180,7 @@ int main(int args, char** argv)
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
-				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click, muteMUTED); state = 0; }
+				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click); state = 0; }
 				else if (ishit(muteRect0, event.button.x, event.button.y))
 				{
 					muteMUTED = !muteMUTED;
@@ -189,7 +191,7 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else if (ActionLevels(ArrNums)) { PlaySound(click, muteMUTED);  state = 2; }
+				else if (ActionLevels(ArrNums)) { PlaySound(click); GamePaused = 0; NeedToGenerateLevel = 1;  state = 2; }
 			}
 
 
@@ -225,10 +227,23 @@ int main(int args, char** argv)
 		// САМА ИГРА
 		else if (state == 2)
 		{
+			// Сгенерировать уровень
+			if (NeedToGenerateLevel)
+			{
+				initCrates(Crates, lvl);
+				//изначальная проверка заспавневшихся веток на активацию
+				RefreshBranches(Crates);
+				NeedToGenerateLevel = 0;
+			}
+			//
+
 			// консоль
 			if (NeedToChangeConsole)
 			{
-				//system("cls");
+				system("cls");
+				cout << "level: " << lvl << "\n\n";
+				cout << "Кол-во цветов: " << CntFlowers << "\n";
+				cout << "Актив  цветов: " << cnt << "\n\n";
 				cout << "TextureType\n";
 				ArrOutput2D_cells(Crates);
 				cout << "Rotation\n";
@@ -238,30 +253,37 @@ int main(int args, char** argv)
 				cout << "\n";
 				ArrOutput2D_cells(Crates, 4);
 				cout << "\n";
-				for (int i = 0; i < 4; i++)
-				{
-					cout << Crates[2][2].ways[i] << " ";
-				}
-				cout << "\n";
-				for (int i = 0; i < 4; i++)
-				{
-					cout << Crates[2][2].ways[i] << " ";
-				}
-				cout << "\n\n";
+				//for (int i = 0; i < 4; i++)
+				//{
+				//	cout << Crates[2][2].ways[i] << " ";
+				//}
+				//cout << "\n";
+				//for (int i = 0; i < 4; i++)
+				//{
+				//	cout << Crates[2][2].ways[i] << " ";
+				//}
+				//cout << "\n\n";
 
 				NeedToChangeConsole = 0;
 			}
 			///
 
 			SDL_RenderCopy(renderer, BGtextureGame1, NULL, &BG2rect);
+			SDL_RenderCopy(renderer, level, NULL, &LevelRect);
+			if (lvl != 10) SDL_RenderCopy(renderer, *mininums[lvl], NULL, &MiniNumRect);
+			else if (lvl == 10) SDL_RenderCopy(renderer, mini10, NULL, &MiniNumRect10);
 			SDL_RenderCopy(renderer, frametexture, NULL, &framerect);
 			SDL_RenderCopy(renderer, BGtexture3, NULL, &Windrect);
+
 			drawCrates(Crates);
+
+			if (WIN) { SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &WINDOWrect); }
 			// ЩЕЛЧКИ ПО КНОПКАМ
+
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
-				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click, muteMUTED); state = 1; }
+				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click); WIN = 0; state = 1; system("cls"); }
 				else if (ishit(muteRect2, event.button.x, event.button.y))
 				{
 					muteMUTED = !muteMUTED;
@@ -272,27 +294,36 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else ActionBranches(Crates);
+				else if (!GamePaused) ActionBranches(Crates);
 			}
 
 
 			// АНИМАЦИИ НАВЕДЕНИЯ
-			
+
 				// ВЕТОЧКИ
-
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
-
-			for (int i = 0; i < numWcells; i++)
+			if (!GamePaused)
 			{
-				for (int j = 0; j < numHcells; j++)
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3);
+				cnt = 0;
+				for (int i = 0; i < numWcells; i++)
 				{
-					if (ishit(Crates[i][j].rect, mouseX, mouseY))
+					for (int j = 0; j < numHcells; j++)
 					{
-						SDL_RenderFillRect(renderer, &Crates[i][j].rect); break;
+						if (Crates[i][j].texturetype == 5 && Crates[i][j].IsActive) cnt++;
+						if (ishit(Crates[i][j].rect, mouseX, mouseY))
+						{
+							SDL_RenderFillRect(renderer, &Crates[i][j].rect); break;
+						}
 					}
 				}
+				if (cnt == CntFlowers) WIN = 1;
+				if (WIN)
+				{
+					lvlcompleted[lvl] = 1;
+					PlaySound(winsound);
+					GamePaused = 1;
+				}
 			}
-
 		
 
 
@@ -330,7 +361,23 @@ int main(int args, char** argv)
 	ArrDelete2D_cell(Crates, numHcells);
 
 	
+	Mix_FreeChunk(click);
+	Mix_FreeChunk(winsound);
+	Mix_FreeMusic(fon);
+
 	SDL_DestroyTexture(mainnameTexture);
+
+	SDL_DestroyTexture(level);
+	SDL_DestroyTexture(mini1);
+	SDL_DestroyTexture(mini2);
+	SDL_DestroyTexture(mini3);
+	SDL_DestroyTexture(mini4);
+	SDL_DestroyTexture(mini5);
+	SDL_DestroyTexture(mini6);
+	SDL_DestroyTexture(mini7);
+	SDL_DestroyTexture(mini8);
+	SDL_DestroyTexture(mini9);
+	SDL_DestroyTexture(mini10);
 
 	SDL_DestroyTexture(none);
 

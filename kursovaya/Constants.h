@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "Structs.h"
 #include "ImporterTools.h"
+#include "Textures.h"
 
 #define SPRITES_FOLDER "sprites/"
 
@@ -11,8 +12,8 @@ const int HEIGHT = 800;
 const int WIDTH = 960;
 
 const int WindX = 180;
-const int WindY = 125;
-const int WindYd = 75;
+const int WindY = 130;
+const int WindYd = 70;
 
 //const int WindW = WIDTH - WindX * 2;
 const int WindH = HEIGHT - WindY - WindYd;
@@ -22,7 +23,6 @@ const int WindW = WindH;
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 extern SDL_Rect Windrect;
-
 
 extern int numWcells;
 extern int numHcells;
@@ -46,13 +46,33 @@ extern int lvl;
 extern bool muteMUTED;
 extern bool musicMUTED;
 
+extern bool GamePaused;
+
 extern bool NeedToChangeConsole;
 
 extern bool NeedToRefreshCrates;
 
-extern int TexturesLvl1[5][5];
+extern bool NeedToGenerateLevel;
+
+extern int LvlSizes[11];
+
+extern int TexturesLvls[10][8][8];
 
 extern int RotatesLvl1[5][5];
+
+extern SDL_Texture** mininums[10];
+
+extern bool WIN;
+
+extern int CntFlowers;
+
+extern int cnt;
+
+extern int Pro3;
+
+extern bool FP;
+
+extern bool lvlcompleted[11];
 
 
 

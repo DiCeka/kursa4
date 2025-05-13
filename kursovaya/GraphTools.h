@@ -2,17 +2,18 @@
 #include <iostream>
 #include "Structs.h"
 #include "Constants.h"
+#include "SDL.h"
 #include "SDL_mixer.h"
 #include "Textures.h"
 using namespace std;
 
-void initCrates(cell** Crates);
+void initCrates(cell** Crates, int lvl);
 
 void drawCrates(cell** Crates);
 
 bool ishit(SDL_Rect rect, int x, int y);
 
-void PlaySound(Mix_Chunk* sound, bool MUTED);
+void PlaySound(Mix_Chunk* sound);
 
 void drawlevels(numsTex* Arr);
 
