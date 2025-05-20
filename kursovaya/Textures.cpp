@@ -83,3 +83,14 @@ SDL_Texture* mini9 = createTexture("9n.png");
 SDL_Texture* mini10 = createTexture("10n.png");
 
 SDL_Texture* none = createTexture("none.png", true);
+
+SDL_Texture* next_texture = createTexture("next.png");
+SDL_Rect next_rect = {790, 550, 16*M, 16*M};
+
+SDL_Texture* cheat_texture = createTexture("cheat.png");
+SDL_Rect cheat_rect = {10, 550, 16*M, 16*M};
+
+SDL_Texture* restart_texture = createTexture("restart.png");
+SDL_Rect restart_rect = { 10, 180, 16 * M, 16 * M };
+
+SDL_Texture* selecter_texture = createTexture("selecter.png");

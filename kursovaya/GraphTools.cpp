@@ -117,8 +117,9 @@ void drawCrates(cell** Crates)
 				}
 			}
 		}
+		NeedToRefreshCrates = 0;
 	}
-	NeedToRefreshCrates = 0;
+
 
 	for (int i = 0; i < numWcells; i++)
 	{
@@ -185,10 +186,10 @@ void ActionBranches(cell** Crates)
 						if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, (Crates[ii][jj].rotation+2)%4);
 					}
 				}
+				NeedTo_();
 			}
 			//if (CheckActiveBranches(Crates, i, j)) Crates[i][j].IsActive = 1;
 			//else Crates[i][j].IsActive = 0;
-			NeedTo_();
 		}
 	}
 }
@@ -239,6 +240,15 @@ void NeedTo_()
 {
 	NeedToChangeConsole = 1; 
 	NeedToRefreshCrates = 1;
+}
+
+void RestartLevel()
+{
+	GamePaused = 0;
+	WIN = 0;
+	NeedToGenerateLevel = 1;
+	NeedToRefreshCrates = 1;
+	NeedToChangeConsole = 1;
 }
 
 bool CheckActiveBranches(cell** Crates, int i, int j)
@@ -394,4 +404,15 @@ bool CheckLeft(cell** Crates, int i, int j)
 		}
 	}
 	return false;
+}
+
+void ActivateAll(cell** Crates)
+{
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			Crates[i][j].IsActive = 1;
+		}
+	}
 }

@@ -54,6 +54,8 @@ extern bool NeedToRefreshCrates;
 
 extern bool NeedToGenerateLevel;
 
+extern bool DeveloperMode;
+
 extern int LvlSizes[11];
 
 extern int TexturesLvls[10][8][8];
@@ -73,6 +75,8 @@ extern int Pro3;
 extern bool FP;
 
 extern bool lvlcompleted[11];
+
+extern int ProZR;
 
 
 

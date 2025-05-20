@@ -19,6 +19,7 @@ using namespace std;
 int main(int args, char** argv)
 {
 	setlocale(LC_ALL, "ru");
+	srand(time(NULL));
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(IMG_INIT_PNG);
@@ -41,10 +42,6 @@ int main(int args, char** argv)
 	//
 
 	cell** Crates = ArrCreate2D_cell();
-
-
-
-	
 
 
 	int m = 7;
@@ -78,7 +75,6 @@ int main(int args, char** argv)
 		}
 		X += 10;
 	}
-
 
 	
 	Mix_PlayMusic(fon, -1);
@@ -191,7 +187,7 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else if (ActionLevels(ArrNums)) { PlaySound(click); GamePaused = 0; NeedToGenerateLevel = 1;  state = 2; }
+				else if (ActionLevels(ArrNums)) { PlaySound(click); RestartLevel(); state = 2; } // GamePaused = 0; NeedToGenerateLevel = 1;
 			}
 
 
@@ -251,38 +247,53 @@ int main(int args, char** argv)
 				cout << "IsActive\n";
 				ArrOutput2D_cells(Crates, 3);
 				cout << "\n";
-				ArrOutput2D_cells(Crates, 4);
-				cout << "\n";
-				//for (int i = 0; i < 4; i++)
-				//{
-				//	cout << Crates[2][2].ways[i] << " ";
-				//}
-				//cout << "\n";
-				//for (int i = 0; i < 4; i++)
-				//{
-				//	cout << Crates[2][2].ways[i] << " ";
-				//}
-				//cout << "\n\n";
+				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
 
 				NeedToChangeConsole = 0;
 			}
 			///
 
+			// ÎÑÍÎÂÍÛÅ ÒÅÊÑÒÓÐÛ
 			SDL_RenderCopy(renderer, BGtextureGame1, NULL, &BG2rect);
 			SDL_RenderCopy(renderer, level, NULL, &LevelRect);
 			if (lvl != 10) SDL_RenderCopy(renderer, *mininums[lvl], NULL, &MiniNumRect);
 			else if (lvl == 10) SDL_RenderCopy(renderer, mini10, NULL, &MiniNumRect10);
 			SDL_RenderCopy(renderer, frametexture, NULL, &framerect);
 			SDL_RenderCopy(renderer, BGtexture3, NULL, &Windrect);
-
 			drawCrates(Crates);
+			//
 
-			if (WIN) { SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &WINDOWrect); }
+
+			// ÀÍÈÌÀÖÈß ÑÂÅÐÊÀÍÈß ÏÎÁÅÄÛ
+			if (WIN) 
+			{ 
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &WINDOWrect); 
+			}
+
+			// ÎÁÐÀÁÎÒÊÀ ÐÅÆÈÌÀ ÐÀÇÐÀÁÎÒ×ÈÊÀ
+			if (DeveloperMode && !WIN)
+			{
+				SDL_RenderCopy(renderer, cheat_texture, NULL, &cheat_rect);
+				if (ishit(cheat_rect, mouseX, mouseY)) { SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &cheat_rect); };
+			}
+
+			// ÑÒÐÎÈÒÅËÜÍÛÅ ËÅÑÀ
+			//int j = 10;
+			//if ((event.type == SDL_KEYDOWN))
+			//{
+			//	if (event.key.keysym.sym == SDLK_DOWN) restart_rect.y += j;
+			//	else if (event.key.keysym.sym == SDLK_UP) restart_rect.y -= j;
+			//	else if (event.key.keysym.sym == SDLK_RIGHT) restart_rect.x += j;
+			//	else if (event.key.keysym.sym == SDLK_LEFT) restart_rect.x -= j;
+			//	NeedToChangeConsole = 1;
+			//}
+			//
+
+
 			// ÙÅË×ÊÈ ÏÎ ÊÍÎÏÊÀÌ
-
-
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
+				// EXECUTING
 				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click); WIN = 0; state = 1; system("cls"); }
 				else if (ishit(muteRect2, event.button.x, event.button.y))
 				{
@@ -294,13 +305,36 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else if (!GamePaused) ActionBranches(Crates);
+				else if (ishit(cheat_rect, event.button.x, event.button.y) && DeveloperMode && !WIN)
+				{
+					PlaySound(click);
+					ActivateAll(Crates);
+					NeedToRefreshCrates = 1;
+					drawCrates(Crates);
+				}
+				else if (ishit(restart_rect, event.button.x, event.button.y))
+				{
+					PlaySound(click);
+					RestartLevel(); continue;
+				}
+				else if (!GamePaused) ActionBranches(Crates); // ÑÒÎÏ ÇÄÅÑÜ ÅÑËÈ ÈÃÐÀ ÍÀ ÏÀÓÇÅ
+
+				// PAUSED
+				else if (ishit(next_rect, event.button.x, event.button.y))
+				{
+					if (WIN && (1 <= lvl && lvl < 10))
+					{
+						PlaySound(click);
+						lvl++;
+						RestartLevel(); continue;
+
+					}
+				}
 			}
+			
+					// ÀÍÈÌÀÖÈÈ ÍÀÂÅÄÅÍÈß
 
-
-			// ÀÍÈÌÀÖÈÈ ÍÀÂÅÄÅÍÈß
-
-				// ÂÅÒÎ×ÊÈ
+			// ÂÅÒÎ×ÊÈ (Ñ×¨Ò×ÈÊ ÖÂÅÒÎÂ, ÎÁÐÀÁÎÒÊÀ ÏÎÁÅÄÛ)
 			if (!GamePaused)
 			{
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3);
@@ -312,7 +346,9 @@ int main(int args, char** argv)
 						if (Crates[i][j].texturetype == 5 && Crates[i][j].IsActive) cnt++;
 						if (ishit(Crates[i][j].rect, mouseX, mouseY))
 						{
-							SDL_RenderFillRect(renderer, &Crates[i][j].rect); break;
+							SDL_RenderFillRect(renderer, &Crates[i][j].rect); 
+							//SDL_RenderCopy(renderer, selecter_texture, NULL, &Crates[i][j].rect);
+							break;
 						}
 					}
 				}
@@ -324,10 +360,24 @@ int main(int args, char** argv)
 					GamePaused = 1;
 				}
 			}
-		
 
-
-
+			// ÊÍÎÏÊÀ RESTART
+			SDL_RenderCopy(renderer, restart_texture, NULL, &restart_rect);
+			if (ishit(restart_rect, mouseX, mouseY)) 
+			{
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, ProZR);
+				SDL_RenderFillRect(renderer, &restart_rect);
+			}
+			// ÊÍÎÏÊÀ NEXT
+			if (WIN && (1 <= lvl && lvl < 10))
+			{
+				SDL_RenderCopy(renderer, next_texture, NULL, &next_rect);
+				if (ishit(next_rect, mouseX, mouseY))
+				{
+					SDL_SetRenderDrawColor(renderer, 255, 255, 255, ProZR);
+					SDL_RenderFillRect(renderer, &next_rect);
+				}
+			}
 			// ÊÍÎÏÊÀ RETURN
 			if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect2);
 			else SDL_RenderCopy(renderer, returnTexture, NULL, &returnRect2);
@@ -366,6 +416,14 @@ int main(int args, char** argv)
 	Mix_FreeMusic(fon);
 
 	SDL_DestroyTexture(mainnameTexture);
+
+	SDL_DestroyTexture(selecter_texture);
+
+	SDL_DestroyTexture(restart_texture);
+
+	SDL_DestroyTexture(cheat_texture);
+
+	SDL_DestroyTexture(next_texture);
 
 	SDL_DestroyTexture(level);
 	SDL_DestroyTexture(mini1);

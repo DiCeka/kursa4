@@ -25,6 +25,8 @@ void Rotate(bool Arr[4]);
 
 void NeedTo_();
 
+void RestartLevel();
+
 bool CheckActiveBranches(cell** Crates, int i, int j);
 
 void ActivationFromRoot(cell** Crates, int i, int j, int dir);
@@ -36,9 +38,8 @@ void TurnOffAllBranches(cell** Crates);
 bool CheckAround(cell** Crates, int i, int j);
 
 bool CheckUp(cell** Crates, int i, int j);
-
 bool CheckRight(cell** Crates, int i, int j);
-
 bool CheckDown(cell** Crates, int i, int j);
-
 bool CheckLeft(cell** Crates, int i, int j);
+
+void ActivateAll(cell** Crates);

@@ -70,8 +70,6 @@ extern SDL_Texture* musicMutedSelected;
 extern SDL_Rect musicRect0;
 extern SDL_Rect musicRect2;
 
-extern SDL_Texture* none;
-
 extern SDL_Rect LevelRect;
 extern SDL_Rect MiniNumRect;
 extern SDL_Rect MiniNumRect10;
@@ -87,3 +85,16 @@ extern SDL_Texture* mini7;
 extern SDL_Texture* mini8;
 extern SDL_Texture* mini9;
 extern SDL_Texture* mini10;
+
+extern SDL_Texture* none;
+
+extern SDL_Texture* next_texture;
+extern SDL_Rect next_rect;
+
+extern SDL_Texture* cheat_texture;
+extern SDL_Rect cheat_rect;
+
+extern SDL_Texture* restart_texture;
+extern SDL_Rect restart_rect;
+
+extern SDL_Texture* selecter_texture;

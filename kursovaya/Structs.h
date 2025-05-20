@@ -17,3 +17,4 @@ struct numsTex
 	SDL_Texture* textureSelected;
 	SDL_Rect rect;
 };
+
