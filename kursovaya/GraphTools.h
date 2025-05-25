@@ -43,3 +43,7 @@ bool CheckDown(cell** Crates, int i, int j);
 bool CheckLeft(cell** Crates, int i, int j);
 
 void ActivateAll(cell** Crates);
+
+void CountActiveFlowers(cell** Crates);
+
+void SelectAnimation(cell** Crates);

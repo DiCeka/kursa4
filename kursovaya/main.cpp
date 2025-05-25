@@ -39,6 +39,8 @@ int main(int args, char** argv)
 	Mix_Music* fon = Mix_LoadMUS("Swimming.wav");
 	Mix_Chunk* click = Mix_LoadWAV("click.wav");
 	Mix_Chunk* winsound = Mix_LoadWAV("winsound.wav");
+	initSounds();
+
 	//
 
 	cell** Crates = ArrCreate2D_cell();
@@ -233,26 +235,6 @@ int main(int args, char** argv)
 			}
 			//
 
-			// êîíñîëü
-			if (NeedToChangeConsole)
-			{
-				system("cls");
-				cout << "level: " << lvl << "\n\n";
-				cout << "Êîë-âî öâåòîâ: " << CntFlowers << "\n";
-				cout << "Àêòèâ  öâåòîâ: " << cnt << "\n\n";
-				cout << "TextureType\n";
-				ArrOutput2D_cells(Crates);
-				cout << "Rotation\n";
-				ArrOutput2D_cells(Crates, 2);
-				cout << "IsActive\n";
-				ArrOutput2D_cells(Crates, 3);
-				cout << "\n";
-				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
-
-				NeedToChangeConsole = 0;
-			}
-			///
-
 			// ÎÑÍÎÂÍÛÅ ÒÅÊÑÒÓÐÛ
 			SDL_RenderCopy(renderer, BGtextureGame1, NULL, &BG2rect);
 			SDL_RenderCopy(renderer, level, NULL, &LevelRect);
@@ -310,6 +292,7 @@ int main(int args, char** argv)
 					PlaySound(click);
 					ActivateAll(Crates);
 					NeedToRefreshCrates = 1;
+					NeedToChangeConsole = 1;
 					drawCrates(Crates);
 				}
 				else if (ishit(restart_rect, event.button.x, event.button.y))
@@ -331,27 +314,14 @@ int main(int args, char** argv)
 					}
 				}
 			}
-			
 					// ÀÍÈÌÀÖÈÈ ÍÀÂÅÄÅÍÈß
 
 			// ÂÅÒÎ×ÊÈ (Ñ×¨Ò×ÈÊ ÖÂÅÒÎÂ, ÎÁÐÀÁÎÒÊÀ ÏÎÁÅÄÛ)
 			if (!GamePaused)
 			{
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3);
-				cnt = 0;
-				for (int i = 0; i < numWcells; i++)
-				{
-					for (int j = 0; j < numHcells; j++)
-					{
-						if (Crates[i][j].texturetype == 5 && Crates[i][j].IsActive) cnt++;
-						if (ishit(Crates[i][j].rect, mouseX, mouseY))
-						{
-							SDL_RenderFillRect(renderer, &Crates[i][j].rect); 
-							//SDL_RenderCopy(renderer, selecter_texture, NULL, &Crates[i][j].rect);
-							break;
-						}
-					}
-				}
+				CountActiveFlowers(Crates);
+				SelectAnimation(Crates);
 				if (cnt == CntFlowers) WIN = 1;
 				if (WIN)
 				{
@@ -360,6 +330,26 @@ int main(int args, char** argv)
 					GamePaused = 1;
 				}
 			}
+
+			// êîíñîëü
+			if (NeedToChangeConsole)
+			{
+				system("cls");
+				cout << "level: " << lvl << "\n\n";
+				cout << "Êîë-âî öâåòîâ: " << CntFlowers << "\n";
+				cout << "Àêòèâ  öâåòîâ: " << cnt << "\n\n";
+				cout << "TextureType\n";
+				ArrOutput2D_cells(Crates);
+				cout << "Rotation\n";
+				ArrOutput2D_cells(Crates, 2);
+				cout << "IsActive\n";
+				ArrOutput2D_cells(Crates, 3);
+				cout << "\n";
+				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
+
+				NeedToChangeConsole = 0;
+			}
+			///
 
 			// ÊÍÎÏÊÀ RESTART
 			SDL_RenderCopy(renderer, restart_texture, NULL, &restart_rect);
@@ -410,7 +400,7 @@ int main(int args, char** argv)
 
 	ArrDelete2D_cell(Crates, numHcells);
 
-	
+	freeSounds();
 	Mix_FreeChunk(click);
 	Mix_FreeChunk(winsound);
 	Mix_FreeMusic(fon);

@@ -187,6 +187,7 @@ void ActionBranches(cell** Crates)
 					}
 				}
 				NeedTo_();
+				PlaySound(whooshes[rand()%6]);
 			}
 			//if (CheckActiveBranches(Crates, i, j)) Crates[i][j].IsActive = 1;
 			//else Crates[i][j].IsActive = 0;
@@ -413,6 +414,34 @@ void ActivateAll(cell** Crates)
 		for (int j = 0; j < numHcells; j++)
 		{
 			Crates[i][j].IsActive = 1;
+		}
+	}
+}
+
+void CountActiveFlowers(cell** Crates)
+{
+	cnt = 0;
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			if (Crates[i][j].texturetype == 5 && Crates[i][j].IsActive) cnt++;
+		}
+	}
+}
+
+void SelectAnimation(cell** Crates)
+{
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			if (ishit(Crates[i][j].rect, mouseX, mouseY))
+			{
+				SDL_RenderFillRect(renderer, &Crates[i][j].rect);
+				//SDL_RenderCopy(renderer, selecter_texture, NULL, &Crates[i][j].rect);
+				break;
+			}
 		}
 	}
 }

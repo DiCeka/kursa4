@@ -3,6 +3,7 @@
 #include "ImporterTools.h"
 #include "SDL.h"
 #include "Constants.h"
+#include "SDL_mixer.h"
 
 
 // загрузка текстур
@@ -98,3 +99,8 @@ extern SDL_Texture* restart_texture;
 extern SDL_Rect restart_rect;
 
 extern SDL_Texture* selecter_texture;
+
+void initSounds();
+void freeSounds();
+
+extern Mix_Chunk* whooshes[6];
