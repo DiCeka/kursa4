@@ -10,6 +10,8 @@
 #include "ArrayTools.h"
 #include "GraphTools.h"
 #include "Textures.h"
+#include "Sounds.h"
+#include "Logic.h"
 
 
 #pragma comment(lib, "SDL2_mixer.lib")
@@ -36,15 +38,8 @@ int main(int args, char** argv)
 	SDL_Texture * mainnameTexture = get_text_texture(renderer, txt, my_font);
 	//
 	// «‡„ÛÁÍ‡ Á‚ÛÍÓ‚
-	Mix_Music* fon = Mix_LoadMUS("Swimming.wav");
-	Mix_Chunk* click = Mix_LoadWAV("click.wav");
-	Mix_Chunk* winsound = Mix_LoadWAV("winsound.wav");
 	initSounds();
-
 	//
-
-	cell** Crates = ArrCreate2D_cell();
-
 
 	int m = 7;
 
@@ -78,14 +73,13 @@ int main(int args, char** argv)
 		X += 10;
 	}
 
-	
-	Mix_PlayMusic(fon, -1);
+	int CurrentTrack = rand() % 3;
+	Mix_PlayMusic(tracks[CurrentTrack], 1);
 
 	bool IS_EXECUTE = true;
 	while (IS_EXECUTE)
 	{
 		if (SDL_PollEvent(&event)) if (event.type == SDL_QUIT) { IS_EXECUTE = false; break; }
-
 		SDL_GetMouseState(&mouseX, &mouseY);
 		if (WIN)
 		{
@@ -95,48 +89,58 @@ int main(int args, char** argv)
 			if (Pro3 == 200) FP = 0;
 			else if (Pro3 == 100) FP = 1;
 		}
+		if (!Mix_PlayingMusic())
+		{
+			Mix_PlayMusic(tracks[(CurrentTrack+1)%3], 1);
+		}
+
 
 		// √À¿¬ÕŒ≈ Ã≈Õﬁ
 		if (state == 0)
 		{
-
 			// —Õ¿◊¿À¿ ‘ŒÕ ¿ œŒ“ŒÃ Œ—“¿À‹ÕŒ≈
 			SDL_RenderCopy(renderer, BGtexture3, NULL, &WINDOWrect);
-
 			SDL_RenderCopy(renderer, nametexture, NULL, &namerect);
 
-			// Ÿ≈À◊ » œŒ  ÕŒœ ¿Ã
+			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
+			if ((event.type == SDL_KEYDOWN))
+			{	
+				if (IsFirstCycle)
+				{
+					KeyNavigation = true;
+					ArrAddElement1D_Rect(Rects, RectsSize, CTAPTrect);
+					ArrAddElement1D_Rect(Rects, RectsSize, muteRect0);
+					ArrAddElement1D_Rect(Rects, RectsSize, musicRect0);
+					CurrentRect = Rects[0];
+					IsFirstCycle = 0;
+					goto after0;
+				}
 
+				if ((event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)) GoToClosestRect(Rects, CurrentRect, 0);
+				else if ((event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)) GoToClosestRect(Rects, CurrentRect, 1);
+				else if ((event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)) GoToClosestRect(Rects, CurrentRect, 2);
+				else if ((event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)) GoToClosestRect(Rects, CurrentRect, 3);
+				else if ((event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE))
+				{
+					if (EqualRects(CurrentRect, CTAPTrect)) CTAPTfunc();
+					else if (EqualRects(CurrentRect, muteRect0)) Mutefunc();
+					else if (EqualRects(CurrentRect, musicRect0)) Musicfunc();
+				}
+			}
+		after0:
+			// Ÿ≈À◊ » œŒ  ÕŒœ ¿Ã
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
 				// —“¿–“  ÕŒœ ¿
-				if (ishit(CTAPTrect, event.button.x, event.button.y))
-				{
-					PlaySound(click);
-					state = 1;
-				}
+				if (ishit(CTAPTrect, event.button.x, event.button.y)) CTAPTfunc();
 				// MUTE  ÕŒœ ¿
-				else if (ishit(muteRect0, event.button.x, event.button.y))
-				{
-					muteMUTED = !muteMUTED;
-				}
+				else if (ishit(muteRect0, event.button.x, event.button.y)) Mutefunc();
 				// MUSIC  ÕŒœ ¿
-				else if (ishit(musicRect0, event.button.x, event.button.y))
-				{
-					musicMUTED = !musicMUTED;
-					if (musicMUTED) Mix_PauseMusic();
-					else Mix_ResumeMusic();
-				}
-			}
-			else if ((event.type == SDL_KEYDOWN))
-			{
-				if (event.key.keysym.sym == SDLK_UP) state = 0;
-				if (event.key.keysym.sym == SDLK_DOWN) state = 0;
-				
+				else if (ishit(musicRect0, event.button.x, event.button.y)) Musicfunc();
 			}
 
 			// ¿Õ»Ã¿÷»» Õ¿¬≈ƒ≈Õ»ﬂ
-
+			
 			//  ÕŒœ ¿ —“¿–“
 			if (ishit(CTAPTrect, mouseX, mouseY)) SDL_RenderCopy(renderer, CTAPTselectedtexture, NULL, &CTAPTrect);
 			else SDL_RenderCopy(renderer, CTAPTtexture, NULL, &CTAPTrect);
@@ -162,8 +166,15 @@ int main(int args, char** argv)
 				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect0);
 				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect0);
 			}
+			// ¬€ƒ≈À≈Õ»≈ Œ“  À¿¬»ÿ
+			if (KeyNavigation)
+			{
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, ProZR);
+				SDL_RenderFillRect(renderer, &CurrentRect);
+				SDL_RenderCopy(renderer, selecter_texture, NULL, &CurrentRect);
+			}
 			
-			//SDL_RenderCopy(renderer, mainnameTexture, NULL, &MainText);
+			//SDL_RenderCopy(renderer, mainnameTexture, NULL, &MainText); // ÿËÙÚ
 
 		}
 
@@ -174,11 +185,50 @@ int main(int args, char** argv)
 
 			drawlevels(ArrNums);
 
+			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
+			if ((event.type == SDL_KEYDOWN))
+			{
+				if (IsFirstCycle)
+				{
+					KeyNavigation = true;
+					ArrAddElement1D_Rect(Rects, RectsSize, returnRect);
+					ArrAddElement1D_Rect(Rects, RectsSize, muteRect0);
+					ArrAddElement1D_Rect(Rects, RectsSize, musicRect0);
+					for (int i = 0; i < 10; i++) ArrAddElement1D_Rect(Rects, RectsSize, ArrNums[i].rect);
+					CurrentRect = Rects[0];
+					IsFirstCycle = 0;
+					goto after1;
+				}
+
+				if ((event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)) GoToClosestRect(Rects, CurrentRect, 0);
+				else if ((event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)) GoToClosestRect(Rects, CurrentRect, 1);
+				else if ((event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)) GoToClosestRect(Rects, CurrentRect, 2);
+				else if ((event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)) GoToClosestRect(Rects, CurrentRect, 3);
+				else if ((event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE))
+				{
+					if (EqualRects(CurrentRect, returnRect)) Returnfunc();
+					else if (EqualRects(CurrentRect, muteRect0)) Mutefunc();
+					else if (EqualRects(CurrentRect, musicRect0)) Musicfunc();
+					else
+					{
+						for (int i = 0; i < 10; i++)
+						{
+							if (EqualRects(CurrentRect, ArrNums[i].rect))
+							{
+								lvl = i + 1;
+								ChangeState(2); 
+								RestartLevel();
+							}
+						}
+					}
+				}
+			}
+		after1:
 			// Ÿ≈À◊ » œŒ  ÕŒœ ¿Ã
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
-				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click); state = 0; }
+				if (ishit(returnRect, event.button.x, event.button.y)) Returnfunc();
 				else if (ishit(muteRect0, event.button.x, event.button.y))
 				{
 					muteMUTED = !muteMUTED;
@@ -189,7 +239,7 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else if (ActionLevels(ArrNums)) { PlaySound(click); RestartLevel(); state = 2; } // GamePaused = 0; NeedToGenerateLevel = 1;
+				else if (ActionLevels(ArrNums)) { ChangeState(2); RestartLevel(); }
 			}
 
 
@@ -220,6 +270,14 @@ int main(int args, char** argv)
 				if (ishit(musicRect0, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect0);
 				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect0);
 			}
+
+			// ¬€ƒ≈À≈Õ»≈ Œ“  À¿¬»ÿ
+			if (KeyNavigation)
+			{
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, ProZR);
+				SDL_RenderFillRect(renderer, &CurrentRect);
+				SDL_RenderCopy(renderer, selecter_texture, NULL, &CurrentRect);
+			}
 		}
 
 		// —¿Ã¿ »√–¿
@@ -244,7 +302,6 @@ int main(int args, char** argv)
 			SDL_RenderCopy(renderer, BGtexture3, NULL, &Windrect);
 			drawCrates(Crates);
 			//
-
 
 			// ¿Õ»Ã¿÷»ﬂ —¬≈– ¿Õ»ﬂ œŒ¡≈ƒ€
 			if (WIN) 
@@ -271,12 +328,64 @@ int main(int args, char** argv)
 			//}
 			//
 
+			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
+			if ((event.type == SDL_KEYDOWN))
+			{
+				if (IsFirstCycle)
+				{
+					KeyNavigation = true;
+					ArrAddElement1D_Rect(Rects, RectsSize, returnRect2);
+					ArrAddElement1D_Rect(Rects, RectsSize, muteRect2);
+					ArrAddElement1D_Rect(Rects, RectsSize, musicRect2);
+					ArrAddElement1D_Rect(Rects, RectsSize, restart_rect);
+					if (!GamePaused)
+					{
+						for (int i = 0; i < numWcells; i++)
+						{
+							for (int j = 0; j < numHcells; j++)
+							{
+								ArrAddElement1D_Rect(Rects, RectsSize, Crates[i][j].rect);
+							}
+						}
+					}
+					if (DeveloperMode && !WIN) ArrAddElement1D_Rect(Rects, RectsSize, cheat_rect);
+					if (WIN) ArrAddElement1D_Rect(Rects, RectsSize, next_rect);
 
+					CurrentRect = Rects[0];
+					IsFirstCycle = 0;
+					goto after2;
+				}
+
+				if ((event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)) GoToClosestRect(Rects, CurrentRect, 0);
+				else if ((event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)) GoToClosestRect(Rects, CurrentRect, 1);
+				else if ((event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)) GoToClosestRect(Rects, CurrentRect, 2);
+				else if ((event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)) GoToClosestRect(Rects, CurrentRect, 3);
+				else if ((event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE))
+				{
+					if (EqualRects(CurrentRect, returnRect2)) Returnfunc();
+					else if (EqualRects(CurrentRect, muteRect2)) Mutefunc();
+					else if (EqualRects(CurrentRect, musicRect2)) Musicfunc();
+					else if (EqualRects(CurrentRect, restart_rect))
+					{
+						if (WIN)
+						{
+							ArrDelElement1D_Rect(Rects, RectsSize, next_rect);
+							if (DeveloperMode) ArrAddElement1D_Rect(Rects, RectsSize, cheat_rect);
+						}
+						Restartfunc();
+						continue;
+					}
+					else if (!WIN && EqualRects(CurrentRect, cheat_rect)) { Cheatfunc(); ResetKeyNavig(); }
+					else if (WIN && EqualRects(CurrentRect, next_rect)) { Nextfunc(); ResetKeyNavig(); continue; }
+					else if (!WIN) ActionBranches(Crates);
+				}
+			}
+		after2:
 			// Ÿ≈À◊ » œŒ  ÕŒœ ¿Ã
 			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button == SDL_BUTTON_LEFT))
 			{
 				// EXECUTING
-				if (ishit(returnRect, event.button.x, event.button.y)) { PlaySound(click); WIN = 0; state = 1; system("cls"); }
+				if (ishit(returnRect, event.button.x, event.button.y)) Returnfunc();
 				else if (ishit(muteRect2, event.button.x, event.button.y))
 				{
 					muteMUTED = !muteMUTED;
@@ -287,31 +396,16 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else if (ishit(cheat_rect, event.button.x, event.button.y) && DeveloperMode && !WIN)
-				{
-					PlaySound(click);
-					ActivateAll(Crates);
-					NeedToRefreshCrates = 1;
-					NeedToChangeConsole = 1;
-					drawCrates(Crates);
-				}
-				else if (ishit(restart_rect, event.button.x, event.button.y))
-				{
-					PlaySound(click);
-					RestartLevel(); continue;
-				}
+				else if (ishit(cheat_rect, event.button.x, event.button.y) && DeveloperMode && !WIN) Cheatfunc();
+				else if (ishit(restart_rect, event.button.x, event.button.y)) { Restartfunc(); continue; }
 				else if (!GamePaused) ActionBranches(Crates); // —“Œœ «ƒ≈—‹ ≈—À» »√–¿ Õ¿ œ¿”«≈
 
 				// PAUSED
-				else if (ishit(next_rect, event.button.x, event.button.y))
-				{
-					if (WIN && (1 <= lvl && lvl < 10))
-					{
-						PlaySound(click);
-						lvl++;
-						RestartLevel(); continue;
-
-					}
+				else if (ishit(next_rect, event.button.x, event.button.y)) 
+				{ 
+					Nextfunc();
+					ResetKeyNavig();
+					continue;
 				}
 			}
 					// ¿Õ»Ã¿÷»» Õ¿¬≈ƒ≈Õ»ﬂ
@@ -328,28 +422,9 @@ int main(int args, char** argv)
 					lvlcompleted[lvl] = 1;
 					PlaySound(winsound);
 					GamePaused = 1;
+					ResetKeyNavig();
 				}
 			}
-
-			// ÍÓÌÒÓÎ¸
-			if (NeedToChangeConsole)
-			{
-				system("cls");
-				cout << "level: " << lvl << "\n\n";
-				cout << " ÓÎ-‚Ó ˆ‚ÂÚÓ‚: " << CntFlowers << "\n";
-				cout << "¿ÍÚË‚  ˆ‚ÂÚÓ‚: " << cnt << "\n\n";
-				cout << "TextureType\n";
-				ArrOutput2D_cells(Crates);
-				cout << "Rotation\n";
-				ArrOutput2D_cells(Crates, 2);
-				cout << "IsActive\n";
-				ArrOutput2D_cells(Crates, 3);
-				cout << "\n";
-				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
-
-				NeedToChangeConsole = 0;
-			}
-			///
 
 			//  ÕŒœ ¿ RESTART
 			SDL_RenderCopy(renderer, restart_texture, NULL, &restart_rect);
@@ -369,7 +444,7 @@ int main(int args, char** argv)
 				}
 			}
 			//  ÕŒœ ¿ RETURN
-			if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect2);
+			if (ishit(returnRect2, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect2);
 			else SDL_RenderCopy(renderer, returnTexture, NULL, &returnRect2);
 			//  ÕŒœ ¿ MUTE
 			if (!muteMUTED)
@@ -393,17 +468,45 @@ int main(int args, char** argv)
 				if (ishit(musicRect2, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect2);
 				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect2);
 			}
+
+			// ¬€ƒ≈À≈Õ»≈ Œ“  À¿¬»ÿ
+			if (KeyNavigation)
+			{
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, ProZR);
+				SDL_RenderFillRect(renderer, &CurrentRect);
+				SDL_RenderCopy(renderer, selecter_texture, NULL, &CurrentRect);
+			}
+
+			// ÍÓÌÒÓÎ¸
+			if (NeedToChangeConsole)
+			{
+				system("cls");
+				cout << CurrentRect.y << "\n\n";
+				cout << "level: " << lvl << "\n\n";
+				cout << " ÓÎ-‚Ó ˆ‚ÂÚÓ‚: " << CntFlowers << "\n";
+				cout << "¿ÍÚË‚  ˆ‚ÂÚÓ‚: " << cnt << "\n\n";
+				cout << "TextureType\n";
+				ArrOutput2D_cells(Crates);
+				cout << "Rotation\n";
+				ArrOutput2D_cells(Crates, 2);
+				cout << "IsActive\n";
+				ArrOutput2D_cells(Crates, 3);
+				cout << "\n";
+				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
+
+				NeedToChangeConsole = 0;
+			}
+			///
 		}
 
 		SDL_RenderPresent(renderer);
 	}
 
+	delete[] Rects;
+
 	ArrDelete2D_cell(Crates, numHcells);
 
 	freeSounds();
-	Mix_FreeChunk(click);
-	Mix_FreeChunk(winsound);
-	Mix_FreeMusic(fon);
 
 	SDL_DestroyTexture(mainnameTexture);
 

@@ -3,12 +3,21 @@
 #include "iostream"
 #include <iomanip>
 #include "Constants.h"
+#include "Logic.h"
 using namespace std;
 
 
 int** ArrCreate2D_int(int rows, int cols);
 
 cell** ArrCreate2D_cell();
+
+SDL_Rect* ArrCreate1D_Rect(int size);
+
+void ArrAddElement1D_Rect(SDL_Rect*& a, int& size, SDL_Rect elem);
+
+void ArrDelElement1D_Rect(SDL_Rect*& a, int& size, SDL_Rect elem);
+
+void ArrClear1D_Rect(SDL_Rect*& a, int& size);
 
 void ArrDelete2D_cell(cell** a, int m);
 

@@ -11,6 +11,9 @@ SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
 
 SDL_Rect Windrect = { WindX, WindY, WindW, WindH };
 
+cell** Crates = ArrCreate2D_cell();
+
+
 int numWcells = 5;
 int numHcells = 5;
 
@@ -34,6 +37,8 @@ bool NeedToChangeConsole = true;
 bool NeedToRefreshCrates = true;
 
 bool NeedToGenerateLevel = true;
+
+bool KeyNavigation = false;
 
 //                  0  1  2  3  4  5  6  7  8  9  0
 int LvlSizes[11] = {0, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8};
@@ -183,9 +188,6 @@ int RotatesLvl1[5][5] = {
 	{1, 0, 0, 0, 0}
 };
 
-
-SDL_Texture** mininums[10] = {0, &mini1, &mini2, &mini3, &mini4, &mini5, &mini6, &mini7, &mini8, &mini9};
-
 bool WIN = 0;
 
 int CntFlowers = 0;
@@ -196,6 +198,13 @@ int Pro3 = 100;
 
 bool FP = 1;
 
+bool IsFirstCycle = 1;
+
 bool lvlcompleted[11] = {0};
 
 int ProZR = 50;
+
+int RectsSize = 0;
+SDL_Rect* Rects = ArrCreate1D_Rect(RectsSize);
+SDL_Rect CurrentRect = {0};
+extern int CurRectInd = 0;

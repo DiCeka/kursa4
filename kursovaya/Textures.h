@@ -6,6 +6,13 @@
 #include "SDL_mixer.h"
 
 
+extern SDL_Rect WINDOWrect;
+extern SDL_Rect BG2rect;
+extern SDL_Rect MainText;
+extern SDL_Rect NullRect;
+
+extern SDL_Texture** mininums[10];
+
 // загрузка текстур
 //
 extern SDL_Texture* BGtextureGame1;
@@ -100,7 +107,4 @@ extern SDL_Rect restart_rect;
 
 extern SDL_Texture* selecter_texture;
 
-void initSounds();
-void freeSounds();
-
-extern Mix_Chunk* whooshes[6];
+//extern SDL_Rect Rects0[]

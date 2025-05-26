@@ -1,6 +1,13 @@
 #pragma once
 #include "Textures.h"
 
+SDL_Rect WINDOWrect = { 0, 0, WIDTH, HEIGHT };
+SDL_Rect BG2rect = { -250, 0, 1334, HEIGHT };
+SDL_Rect MainText = { 75, 200, WIDTH - WindX * 2, 170 };
+SDL_Rect NullRect = { 0 };
+
+SDL_Texture** mininums[10] = { 0, &mini1, &mini2, &mini3, &mini4, &mini5, &mini6, &mini7, &mini8, &mini9 };
+
 // загрузка текстур
 //
 SDL_Texture* BGtextureGame1 = createTexture("fon2.bmp");
@@ -94,35 +101,4 @@ SDL_Texture* restart_texture = createTexture("restart.png");
 SDL_Rect restart_rect = { 10, 180, 16 * M, 16 * M };
 
 SDL_Texture* selecter_texture = createTexture("selecter.png");
-
-Mix_Chunk* whoosh1 = nullptr;
-Mix_Chunk* whoosh2 = nullptr;
-Mix_Chunk* whoosh3 = nullptr;
-Mix_Chunk* whoosh4 = nullptr;
-Mix_Chunk* whoosh5 = nullptr;
-Mix_Chunk* whoosh6 = nullptr;
-
-Mix_Chunk* whooshes[6] = { nullptr };
-
-void initSounds()
-{
-	const char* filenames[6] = {
-	"whoosh1.wav",
-	"whoosh2.wav",
-	"whoosh3.wav",
-	"whoosh4.wav",
-	"whoosh5.wav",
-	"whoosh6.wav"
-	};
-
-	for (int i = 0; i < 6; ++i)
-		whooshes[i] = Mix_LoadWAV(filenames[i]);
-}
-
-void freeSounds() {
-	for (int i = 0; i < 6; ++i) {
-		Mix_FreeChunk(whooshes[i]);
-		whooshes[i] = nullptr;
-	}
-}
 

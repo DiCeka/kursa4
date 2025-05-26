@@ -131,7 +131,9 @@
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="GraphTools.cpp" />
     <ClCompile Include="ImporterTools.cpp" />
+    <ClCompile Include="Logic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +144,8 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GraphTools.h" />
     <ClInclude Include="ImporterTools.h" />
+    <ClInclude Include="Logic.h" />
+    <ClInclude Include="Sounds.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="Textures.h" />
   </ItemGroup>

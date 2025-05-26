@@ -139,11 +139,6 @@ bool ishit(SDL_Rect rect, int x, int y)
 	return false;
 }
 
-void PlaySound(Mix_Chunk* sound)
-{
-	if (!muteMUTED) Mix_PlayChannel(-1, sound, 0);
-}
-
 void drawlevels(numsTex* Arr)
 {
 	//if (ishit(returnRect, mouseX, mouseY)) SDL_RenderCopy(renderer, returnSelectedTexture, NULL, &returnRect);
@@ -171,7 +166,7 @@ void ActionBranches(cell** Crates)
 	{
 		for (int j = 0; j < numHcells; j++)
 		{
-			if (ishit(Crates[i][j].rect, event.button.x, event.button.y))
+			if (ishit(Crates[i][j].rect, event.button.x, event.button.y) || EqualRects(CurrentRect, Crates[i][j].rect))
 			{
 				Crates[i][j].rotation = (Crates[i][j].rotation+1)%4;
 				Rotate(Crates[i][j].ways);
@@ -235,21 +230,6 @@ void Rotate(bool Arr[4])
 		Arr[i] = Arr[i - 1];
 	}
 	Arr[0] = d;
-}
-
-void NeedTo_()
-{
-	NeedToChangeConsole = 1; 
-	NeedToRefreshCrates = 1;
-}
-
-void RestartLevel()
-{
-	GamePaused = 0;
-	WIN = 0;
-	NeedToGenerateLevel = 1;
-	NeedToRefreshCrates = 1;
-	NeedToChangeConsole = 1;
 }
 
 bool CheckActiveBranches(cell** Crates, int i, int j)

@@ -31,6 +31,63 @@ cell** ArrCreate2D_cell()
     return a;
 }
 
+SDL_Rect* ArrCreate1D_Rect(int size)
+{
+    SDL_Rect* a = new SDL_Rect[size];
+
+    return a;
+}
+
+void ArrAddElement1D_Rect(SDL_Rect*& a, int& size, SDL_Rect elem)
+{
+    // Ищем такой же элемент
+    int ind = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (EqualRects(a[i], elem)) { ind = i;  break; }
+    }
+    if (ind == -1)
+    {
+        SDL_Rect* newarr = new SDL_Rect[size + 1];
+        for (int i = 0; i < size; i++) newarr[i] = a[i];
+        newarr[size] = elem;
+        size++;
+        delete[] a;
+        a = newarr;
+    }
+}
+
+void ArrDelElement1D_Rect(SDL_Rect*& a, int& size, SDL_Rect elem)
+{
+    // Ищем индекс элемента
+    int ind = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (EqualRects(a[i], elem)) { ind = i; }
+    }
+
+    if (ind != -1)
+    {
+        SDL_Rect* newarr = new SDL_Rect[size - 1];
+        for (int i = 0; i < size; i++)
+        {
+            if (i < ind) newarr[i] = a[i];
+            else if (i > ind) newarr[i] = a[i+1];
+        }
+        size--;
+        delete[] a;
+        a = newarr;
+    }
+}
+
+void ArrClear1D_Rect(SDL_Rect*& a, int& size)
+{
+    SDL_Rect* newarr = new SDL_Rect[0];
+    size = 0;
+    delete[] a;
+    a = newarr;
+}
+
 void ArrDelete2D_cell(cell** a, int m) {
     for (int i = 0; i < m; i++) {
         delete[] a[i];

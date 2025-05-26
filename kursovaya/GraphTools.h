@@ -5,6 +5,8 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 #include "Textures.h"
+#include "Sounds.h"
+#include "Logic.h"
 using namespace std;
 
 void initCrates(cell** Crates, int lvl);
@@ -13,8 +15,6 @@ void drawCrates(cell** Crates);
 
 bool ishit(SDL_Rect rect, int x, int y);
 
-void PlaySound(Mix_Chunk* sound);
-
 void drawlevels(numsTex* Arr);
 
 bool ActionLevels(numsTex* Arr);
@@ -22,10 +22,6 @@ bool ActionLevels(numsTex* Arr);
 void ActionBranches(cell** Crates);
 
 void Rotate(bool Arr[4]);
-
-void NeedTo_();
-
-void RestartLevel();
 
 bool CheckActiveBranches(cell** Crates, int i, int j);
 

@@ -3,8 +3,25 @@
 #include "Structs.h"
 #include "ImporterTools.h"
 #include "Textures.h"
-
+#include "ArrayTools.h"
 #define SPRITES_FOLDER "sprites/"
+
+extern bool DeveloperMode;
+
+extern SDL_Window* window;
+extern SDL_Renderer* renderer;
+extern SDL_Rect Windrect;
+
+extern 	cell** Crates;
+
+extern int numWcells;
+extern int numHcells;
+
+extern int CRATESIZE;
+
+extern int mouseX, mouseY;
+
+extern SDL_Event event;
 
 const int M = 10;
 
@@ -19,25 +36,6 @@ const int WindYd = 70;
 const int WindH = HEIGHT - WindY - WindYd;
 const int WindW = WindH;
 // 600x600 размер окна
-
-extern SDL_Window* window;
-extern SDL_Renderer* renderer;
-extern SDL_Rect Windrect;
-
-extern int numWcells;
-extern int numHcells;
-
-const SDL_Rect WINDOWrect = { 0, 0, WIDTH, HEIGHT};
-const SDL_Rect BG2rect = { -250, 0, 1334, HEIGHT };
-
-//const int CRATESIZE = WindW / numWcells;
-extern int CRATESIZE;
-
-const SDL_Rect MainText = {75, 200, WIDTH - WindX*2, 170};
-
-extern int mouseX, mouseY;
-
-extern SDL_Event event;
 
 extern int state;
 
@@ -54,15 +52,13 @@ extern bool NeedToRefreshCrates;
 
 extern bool NeedToGenerateLevel;
 
-extern bool DeveloperMode;
+extern bool KeyNavigation;
 
 extern int LvlSizes[11];
 
 extern int TexturesLvls[10][8][8];
 
 extern int RotatesLvl1[5][5];
-
-extern SDL_Texture** mininums[10];
 
 extern bool WIN;
 
@@ -74,9 +70,16 @@ extern int Pro3;
 
 extern bool FP;
 
+extern bool IsFirstCycle;	
+
 extern bool lvlcompleted[11];
 
 extern int ProZR;
+
+extern int RectsSize;
+extern SDL_Rect* Rects;
+extern SDL_Rect CurrentRect;
+extern int CurRectInd;
 
 
 
