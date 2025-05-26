@@ -31,3 +31,5 @@ void Returnfunc();
 void Restartfunc();
 void Cheatfunc();
 void Nextfunc();
+// от buttonCLick, функция которая проверяет, нажата ли какая-либо из работающих клавиш
+bool ButCl();

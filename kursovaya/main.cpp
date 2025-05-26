@@ -108,7 +108,7 @@ int main(int args, char** argv)
 			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
 			if ((event.type == SDL_KEYDOWN))
 			{	
-				if (IsFirstCycle)
+				if (IsFirstCycle && ButCl())
 				{
 					KeyNavigation = true;
 					ArrAddElement1D_Rect(Rects, RectsSize, CTAPTrect);
@@ -191,7 +191,7 @@ int main(int args, char** argv)
 			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
 			if ((event.type == SDL_KEYDOWN))
 			{
-				if (IsFirstCycle)
+				if (IsFirstCycle && ButCl())
 				{
 					KeyNavigation = true;
 					ArrAddElement1D_Rect(Rects, RectsSize, returnRect);
@@ -334,7 +334,7 @@ int main(int args, char** argv)
 			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
 			if ((event.type == SDL_KEYDOWN))
 			{
-				if (IsFirstCycle)
+				if (IsFirstCycle && ButCl())
 				{
 					KeyNavigation = true;
 					ArrAddElement1D_Rect(Rects, RectsSize, returnRect2);
@@ -484,7 +484,6 @@ int main(int args, char** argv)
 			if (NeedToChangeConsole)
 			{
 				system("cls");
-				cout << CurrentRect.y << "\n\n";
 				cout << "level: " << lvl << "\n\n";
 				cout << " ÓÎ-‚Ó ˆ‚ÂÚÓ‚: " << CntFlowers << "\n";
 				cout << "¿ÍÚË‚  ˆ‚ÂÚÓ‚: " << cnt << "\n\n";

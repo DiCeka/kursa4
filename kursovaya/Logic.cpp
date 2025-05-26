@@ -37,7 +37,6 @@ void RestartLevel()
 
 void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 {
-	PlaySound(whooshes[0]);
 	int min_dY = 10000, min_dX = 10000, ind = -1, indZ = -1;
 	int Ccur_X = CenterOfRect(CurrentRect).x;
 	int Ccur_Y = CenterOfRect(CurrentRect).y;
@@ -138,8 +137,8 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 		break;
 	}
 	}
-	if (ind > -1) CurrentRect = Rects[ind];
-	else if(ind == -1 && indZ != -1) CurrentRect = Rects[indZ];
+	if (ind > -1) { CurrentRect = Rects[ind]; PlaySound(whooshes[0]); }
+	else if (ind == -1 && indZ != -1) { CurrentRect = Rects[indZ]; 	PlaySound(whooshes[0]); }
 }
 
 double DistanceBetwRects(SDL_Rect Rect1, SDL_Rect Rect2)
@@ -207,4 +206,12 @@ void Nextfunc()
 		lvl++;
 		RestartLevel();
 	}
+}
+
+bool ButCl()
+{
+	if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w || \
+		event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d || (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s) || \
+		event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a ) return 1;
+	return 0;
 }
