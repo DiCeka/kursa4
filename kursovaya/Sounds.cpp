@@ -9,6 +9,7 @@ Mix_Music* fon1 = nullptr;
 Mix_Music* fon2 = nullptr;
 Mix_Music* fon3 = nullptr;
 Mix_Chunk* winsound = nullptr;
+Mix_Chunk* whoosh = nullptr;
 
 void initSounds()
 {
@@ -16,6 +17,7 @@ void initSounds()
 	fon1 = Mix_LoadMUS("Swimming.wav");
 	fon2 = Mix_LoadMUS("Lluvia.wav");
 	fon3 = Mix_LoadMUS("Gymnopedie.wav");
+	whoosh = Mix_LoadWAV("whoosh.wav");
 	tracks[0] = fon1;
 	tracks[1] = fon2;
 	tracks[2] = fon3;
@@ -39,7 +41,11 @@ void freeSounds()
 {
 	Mix_FreeChunk(click);
 	Mix_FreeChunk(winsound);
+	Mix_FreeChunk(whoosh);
 	Mix_FreeMusic(fon1);
+	Mix_FreeMusic(fon2);
+	Mix_FreeMusic(fon3);
+
 
 	for (int i = 0; i < 6; ++i) {
 		Mix_FreeChunk(whooshes[i]);

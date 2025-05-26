@@ -221,6 +221,7 @@ int main(int args, char** argv)
 								lvl = i + 1;
 								ChangeState(2); 
 								RestartLevel();
+								PlaySound(click);
 							}
 						}
 					}
@@ -242,7 +243,7 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				else if (ActionLevels(ArrNums)) { ChangeState(2); RestartLevel(); }
+				else if (ActionLevels(ArrNums)) { ChangeState(2); RestartLevel(); PlaySound(click); }
 			}
 
 

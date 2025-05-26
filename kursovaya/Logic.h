@@ -4,7 +4,7 @@
 #include "Sounds.h"
 #include "GraphTools.h"
 
-void PlaySound(Mix_Chunk* sound);
+void PlaySound(Mix_Chunk* sound, int volume = 128);
 
 void ChangeState(int _state_);
 

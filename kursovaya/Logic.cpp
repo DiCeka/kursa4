@@ -1,8 +1,18 @@
 #include "Logic.h"
 
-void PlaySound(Mix_Chunk* sound)
+void PlaySound(Mix_Chunk* sound, int volume)
 {
-	if (!muteMUTED) Mix_PlayChannel(-1, sound, 0);
+	if (!muteMUTED)
+	{
+		//if (volume != 128)
+		//{
+		//	Mix_VolumeChunk(sound, volume);
+		//	Mix_PlayChannel(-1, sound, 0);
+		//	Mix_VolumeChunk(sound, 128);
+		//}
+		//else
+			Mix_PlayChannel(-1, sound, 0);
+	}
 }
 
 void ChangeState(int _state_)
@@ -137,8 +147,8 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 		break;
 	}
 	}
-	if (ind > -1) { CurrentRect = Rects[ind]; PlaySound(whooshes[0]); }
-	else if (ind == -1 && indZ != -1) { CurrentRect = Rects[indZ]; 	PlaySound(whooshes[0]); }
+	if (ind > -1) { CurrentRect = Rects[ind]; PlaySound(whoosh); }
+	else if (ind == -1 && indZ != -1) { CurrentRect = Rects[indZ]; PlaySound(whoosh); }
 }
 
 double DistanceBetwRects(SDL_Rect Rect1, SDL_Rect Rect2)
