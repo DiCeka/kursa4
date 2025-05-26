@@ -43,6 +43,9 @@ int main(int args, char** argv)
 
 	int m = 7;
 
+	SDL_Surface* icon = IMG_Load("sprites/icon.png");
+	SDL_SetWindowIcon(window, icon);
+
 	SDL_Texture** ArrTexture = (SDL_Texture**)malloc(0 * sizeof(int));
 
 	numsTex ArrNums[10];
@@ -377,7 +380,7 @@ int main(int args, char** argv)
 					}
 					else if (!WIN && EqualRects(CurrentRect, cheat_rect)) { Cheatfunc(); ResetKeyNavig(); }
 					else if (WIN && EqualRects(CurrentRect, next_rect)) { Nextfunc(); ResetKeyNavig(); continue; }
-					else if (!WIN) ActionBranches(Crates);
+					else if (!WIN) ActionBranches(Crates, 0);
 				}
 			}
 		after2:
@@ -398,7 +401,7 @@ int main(int args, char** argv)
 				}
 				else if (ishit(cheat_rect, event.button.x, event.button.y) && DeveloperMode && !WIN) Cheatfunc();
 				else if (ishit(restart_rect, event.button.x, event.button.y)) { Restartfunc(); continue; }
-				else if (!GamePaused) ActionBranches(Crates); // —“Œœ «ƒ≈—‹ ≈—À» »√–¿ Õ¿ œ¿”«≈
+				else if (!GamePaused) ActionBranches(Crates, 1); // —“Œœ «ƒ≈—‹ ≈—À» »√–¿ Õ¿ œ¿”«≈
 
 				// PAUSED
 				else if (ishit(next_rect, event.button.x, event.button.y)) 
@@ -507,6 +510,8 @@ int main(int args, char** argv)
 	ArrDelete2D_cell(Crates, numHcells);
 
 	freeSounds();
+
+	SDL_FreeSurface(icon);
 
 	SDL_DestroyTexture(mainnameTexture);
 

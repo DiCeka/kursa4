@@ -19,7 +19,7 @@ void drawlevels(numsTex* Arr);
 
 bool ActionLevels(numsTex* Arr);
 
-void ActionBranches(cell** Crates);
+void ActionBranches(cell** Crates, bool click);
 
 void Rotate(bool Arr[4]);
 
