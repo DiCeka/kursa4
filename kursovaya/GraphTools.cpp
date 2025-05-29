@@ -14,7 +14,7 @@ void initCrates(cell** Crates, int lvl)
 		{
 			Crates[i][j].rect = {WindX + j * CRATESIZE, WindY + i * CRATESIZE, CRATESIZE, CRATESIZE};
 			Crates[i][j].texturetype = TexturesLvls[lvl-1][i][j];
-			if (Crates[i][j].texturetype != 0) Crates[i][j].rotation = rand()%4;
+			if (Crates[i][j].texturetype != 0) Crates[i][j].rotation = (rand()%4)*90;
 			else Crates[i][j].rotation = 0;
 			Crates[i][j].IsActive = 0;
 			for (int k = 0; k < 4; k++)
@@ -41,7 +41,7 @@ void initCrates(cell** Crates, int lvl)
 				Crates[i][j].texture = br3na; 
 				Crates[i][j].ways[0] = 1;
 				Crates[i][j].ways[1] = 1;
-				Crates[i][j].ways[2] = true;
+				Crates[i][j].ways[2] = 1;
 				break; 
 			}
 			case 4: 
@@ -67,7 +67,7 @@ void initCrates(cell** Crates, int lvl)
 				Crates[i][j].ways[2] = 1;
 				break; }
 			}
-			for (int h = 0; h < Crates[i][j].rotation; h++) Rotate(Crates[i][j].ways);
+			for (int h = 0; h < (Crates[i][j].rotation/90); h++) Rotate(Crates[i][j].ways);
 		}
 	}
 }
@@ -125,7 +125,7 @@ void drawCrates(cell** Crates)
 	{
 		for (int j = 0; j < numHcells; j++)
 		{
-			SDL_RenderCopyEx(renderer, Crates[i][j].texture, NULL, &Crates[i][j].rect, Crates[i][j].rotation * 90, NULL, SDL_FLIP_NONE);
+			SDL_RenderCopyEx(renderer, Crates[i][j].texture, NULL, &Crates[i][j].rect, Crates[i][j].rotation, NULL, SDL_FLIP_NONE);
 		}
 	}
 
@@ -166,47 +166,39 @@ void ActionBranches(cell** Crates, bool click)
 	{
 		for (int j = 0; j < numHcells; j++)
 		{
+			bool GO = 0;
 			if (click)
 			{
 				if (ishit(Crates[i][j].rect, event.button.x, event.button.y))
 				{
-					Crates[i][j].rotation = (Crates[i][j].rotation + 1) % 4;
-					Rotate(Crates[i][j].ways);
-
-
-					TurnOffAllBranches(Crates);
-
-					for (int ii = 0; ii < numWcells; ii++)
-					{
-						for (int jj = 0; jj < numHcells; jj++)
-						{
-							if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, (Crates[ii][jj].rotation + 2) % 4);
-						}
-					}
-					NeedTo_();
-					PlaySound(whooshes[rand() % 6]);
+					GO = 1;
 				}
 			}
 			else
 			{
 				if (EqualRects(CurrentRect, Crates[i][j].rect))
 				{
-					Crates[i][j].rotation = (Crates[i][j].rotation + 1) % 4;
-					Rotate(Crates[i][j].ways);
-
-
-					TurnOffAllBranches(Crates);
-
-					for (int ii = 0; ii < numWcells; ii++)
-					{
-						for (int jj = 0; jj < numHcells; jj++)
-						{
-							if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, (Crates[ii][jj].rotation + 2) % 4);
-						}
-					}
-					NeedTo_();
-					PlaySound(whooshes[rand() % 6]);
+					GO = 1;
 				}
+			}
+			if (GO)
+			{
+				Crates[i][j].rotation = (Crates[i][j].rotation + 90) % 360;
+				Rotate(Crates[i][j].ways);
+
+
+				// ÀÊÒÈÂÀÖÈß
+				TurnOffAllBranches(Crates);
+				for (int ii = 0; ii < numWcells; ii++)
+				{
+					for (int jj = 0; jj < numHcells; jj++)
+					{
+						if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, ((Crates[ii][jj].rotation + 180) % 360)/90);
+					}
+				}
+				/////
+				NeedTo_();
+				PlaySound(whooshes[rand() % 6]);
 			}
 			//if (CheckActiveBranches(Crates, i, j)) Crates[i][j].IsActive = 1;
 			//else Crates[i][j].IsActive = 0;

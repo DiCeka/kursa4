@@ -1,7 +1,7 @@
 #pragma once
 #include "Constants.h"
 
-bool DeveloperMode = 1;
+bool DeveloperMode = 0;
 
 SDL_Window* window = SDL_CreateWindow(u8"Ветки",
 	SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
