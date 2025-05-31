@@ -8,6 +8,10 @@
 
 extern bool DeveloperMode;
 
+extern bool AnimationIsON;
+
+extern int SpeedOfAnimation;
+
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 extern SDL_Rect Windrect;
@@ -81,6 +85,7 @@ extern SDL_Rect* Rects;
 extern SDL_Rect CurrentRect;
 extern int CurRectInd;
 
+extern int ArrSpeedOfAnim[6	];
 
 
 //extern numsTex ArrNums[10];

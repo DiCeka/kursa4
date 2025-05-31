@@ -494,6 +494,8 @@ int main(int args, char** argv)
 				ArrOutput2D_cells(Crates, 2);
 				cout << "IsActive\n";
 				ArrOutput2D_cells(Crates, 3);
+				cout << "IsAnimating\n";
+				ArrOutput2D_cells(Crates, 5);
 				cout << "\n";
 				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
 

@@ -17,6 +17,7 @@ void initCrates(cell** Crates, int lvl)
 			if (Crates[i][j].texturetype != 0) Crates[i][j].rotation = (rand()%4)*90;
 			else Crates[i][j].rotation = 0;
 			Crates[i][j].IsActive = 0;
+			Crates[i][j].IsAnimating = 0;
 			for (int k = 0; k < 4; k++)
 				Crates[i][j].ways[k] = 0;
 			switch (Crates[i][j].texturetype)
@@ -125,6 +126,21 @@ void drawCrates(cell** Crates)
 	{
 		for (int j = 0; j < numHcells; j++)
 		{
+			if (Crates[i][j].IsAnimating)
+			{
+				Crates[i][j].rotation += ArrSpeedOfAnim[SpeedOfAnimation];
+
+				if (Crates[i][j].rotation % 90 == 0)
+				{
+					Crates[i][j].rotation = (Crates[i][j].rotation % 360);
+
+					Crates[i][j].IsAnimating--;
+					Rotate(Crates[i][j].ways);
+					RefreshBranches(Crates);
+				}
+			}
+
+
 			SDL_RenderCopyEx(renderer, Crates[i][j].texture, NULL, &Crates[i][j].rect, Crates[i][j].rotation, NULL, SDL_FLIP_NONE);
 		}
 	}
@@ -169,32 +185,28 @@ void ActionBranches(cell** Crates, bool click)
 			bool GO = 0;
 			if (click)
 			{
-				if (ishit(Crates[i][j].rect, event.button.x, event.button.y))
-				{
-					GO = 1;
-				}
+				if (ishit(Crates[i][j].rect, event.button.x, event.button.y)) GO = 1;
 			}
 			else
 			{
-				if (EqualRects(CurrentRect, Crates[i][j].rect))
-				{
-					GO = 1;
-				}
+				if (EqualRects(CurrentRect, Crates[i][j].rect)) GO = 1;
 			}
 			if (GO)
 			{
-				Crates[i][j].rotation = (Crates[i][j].rotation + 90) % 360;
-				Rotate(Crates[i][j].ways);
-
-
-				// ÀÊÒÈÂÀÖÈß
-				TurnOffAllBranches(Crates);
-				for (int ii = 0; ii < numWcells; ii++)
+				if (AnimationIsON)
 				{
-					for (int jj = 0; jj < numHcells; jj++)
-					{
-						if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, ((Crates[ii][jj].rotation + 180) % 360)/90);
-					}
+					Crates[i][j].IsAnimating++;
+					if (Crates[i][j].texturetype != 6) Crates[i][j].IsActive = 0;
+					RefreshBranches(Crates);
+				}
+				else
+				{
+
+					Crates[i][j].rotation = (Crates[i][j].rotation + 90) % 360;
+					Rotate(Crates[i][j].ways);
+
+					// ÀÊÒÈÂÀÖÈß
+					RefreshBranches(Crates);
 				}
 				/////
 				NeedTo_();
@@ -208,21 +220,15 @@ void ActionBranches(cell** Crates, bool click)
 
 void RefreshBranches(cell** Crates)
 {
-	for (int i = 0; i < numWcells; i++)
+	TurnOffAllBranches(Crates);
+	for (int ii = 0; ii < numWcells; ii++)
 	{
-		for (int j = 0; j < numHcells; j++)
+		for (int jj = 0; jj < numHcells; jj++)
 		{
-			TurnOffAllBranches(Crates);
-			for (int ii = 0; ii < numWcells; ii++)
-			{
-				for (int jj = 0; jj < numHcells; jj++)
-				{
-					if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, (Crates[ii][jj].rotation + 2) % 4);
-				}
-			}
-			NeedTo_();
+			if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, ((Crates[ii][jj].rotation/90) + 2) % 4);
 		}
 	}
+	NeedTo_();
 }
 
 void TurnOffAllBranches(cell** Crates)
@@ -292,7 +298,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	{
 	case 0:
 	{
-		if ( (CheckUp(Crates, i, j)) && !Crates[i-1][j].IsActive)
+		if ( (CheckUp(Crates, i, j)) && !Crates[i-1][j].IsActive && !Crates[i - 1][j].IsAnimating)
 		{
 			Crates[i - 1][j].IsActive = 1;
 			for (int k = 0; k < 4; k++)
@@ -305,7 +311,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	}
 	case 1:
 	{
-		if ((CheckRight(Crates, i, j)) && !Crates[i][j+1].IsActive)
+		if ((CheckRight(Crates, i, j)) && !Crates[i][j+1].IsActive && !Crates[i][j+1].IsAnimating)
 		{
 			Crates[i][j + 1].IsActive = 1;
 			for (int k = 0; k < 4; k++)
@@ -318,7 +324,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	}
 	case 2:
 	{
-		if ((CheckDown(Crates, i, j)) && !Crates[i + 1][j].IsActive)
+		if ((CheckDown(Crates, i, j)) && !Crates[i + 1][j].IsActive && !Crates[i + 1][j].IsAnimating)
 		{
 			Crates[i + 1][j].IsActive = 1;
 			for (int k = 0; k < 4; k++)
@@ -331,7 +337,7 @@ void ActivationFromRoot(cell** Crates, int i, int j, int dir)
 	}
 	case 3:
 	{
-		if ((CheckLeft(Crates, i, j)) && !Crates[i][j-1].IsActive)
+		if ((CheckLeft(Crates, i, j)) && !Crates[i][j-1].IsActive && !Crates[i][j-1].IsAnimating)
 		{
 			Crates[i][j - 1].IsActive = 1;
 			for (int k = 0; k < 4; k++)

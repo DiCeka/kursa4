@@ -8,6 +8,7 @@ struct cell
 	SDL_Rect rect;
 	int rotation;
 	bool IsActive;
+	int IsAnimating;
 	bool ways[4] = {0};
 };
 

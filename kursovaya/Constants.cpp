@@ -3,6 +3,10 @@
 
 bool DeveloperMode = 0;
 
+bool AnimationIsON = 1;
+// Число от 1 до 5. 1 - медленно, 5 - быстро
+int SpeedOfAnimation = 3;
+
 SDL_Window* window = SDL_CreateWindow(u8"Ветки",
 	SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 	WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
@@ -207,4 +211,6 @@ int ProZR = 50;
 int RectsSize = 0;
 SDL_Rect* Rects = ArrCreate1D_Rect(RectsSize);
 SDL_Rect CurrentRect = {0};
-extern int CurRectInd = 0;
+int CurRectInd = 0;
+
+int ArrSpeedOfAnim[6] = {0, 1, 2, 3, 6, 9};
