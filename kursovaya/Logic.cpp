@@ -509,3 +509,16 @@ int SearchOneWay(cell cel)
 {
 	for (int i = 0; i < 4; i++) if (cel.ways[i]) return i;
 }
+
+void RandomizeRotates(cell** Crates)
+{
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			int r = (rand() % 4);
+			Crates[i][j].rotation = (Crates[i][j].rotation + r * 90) % 360;
+			for (int k = 0; k < r; k++) Rotate(Crates[i][j].ways);
+		}
+	}
+}

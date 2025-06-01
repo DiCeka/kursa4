@@ -48,3 +48,5 @@ bool IsFieldFilled(cell** Crates);
 int CountWays(cell cel);
 
 int SearchOneWay(cell cel);
+
+void RandomizeRotates(cell** Crates);

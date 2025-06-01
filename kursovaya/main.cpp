@@ -591,9 +591,9 @@ int main(int args, char** argv)
 					{
 						GamePaused = 0;
 						WIN = 0;
-						NeedToGenerateLevel = 1;
-						NeedToRefreshCrates = 1;
 						NeedToChangeConsole = 1;
+						RandomizeRotates(Crates);
+						RefreshBranches(Crates);
 						PlaySound(click);
 						continue;
 					}
@@ -622,9 +622,9 @@ int main(int args, char** argv)
 				else if (ishit(restart_rect, event.button.x, event.button.y)) {
 					GamePaused = 0;
 					WIN = 0;
-					NeedToGenerateLevel = 1;
-					NeedToRefreshCrates = 1;
 					NeedToChangeConsole = 1;
+					RandomizeRotates(Crates);
+					RefreshBranches(Crates);
 					PlaySound(click);
 					continue; }
 				else if (!GamePaused) ActionBranches(Crates, 1); // —“Œœ «ƒ≈—‹ ≈—À» »√–¿ Õ¿ œ¿”«≈

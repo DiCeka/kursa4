@@ -117,15 +117,7 @@ void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
 	}
 
 	// оеперюянбйю
-	for (int i = 0; i < numWcells; i++)
-	{
-		for (int j = 0; j < numHcells; j++)
-		{
-			int r = (rand() % 4);
-			Crates[i][j].rotation = (Crates[i][j].rotation + r*90) % 360;
-			for (int k = 0; k < r; k++) Rotate(Crates[i][j].ways);
-		}
-	}
+	RandomizeRotates(Crates);
 }
 
 void initCrates(cell** Crates, int lvl)
