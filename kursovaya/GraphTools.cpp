@@ -25,12 +25,107 @@ void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
 
 			SpawnNextBranch(Crates, ii, jj, ((rot + 2) % 4) );
 
-
 			CntRoots--;
 		}
 	}
 
+	while (!IsFieldFilled(Crates))
+	{
+		// Заполнили координаты всех веток с возможностью разветвлиться
+		int PlSize = 0;
+		SDL_Point* ArrPl = ArrCreate1D_Point(PlSize);
 
+		for (int i = 0; i < numWcells; i++)
+		{
+			for (int j = 0; j < numHcells; j++)
+			{
+				if (Crates[i][j].texturetype == 0 || Crates[i][j].texturetype == 5 || Crates[i][j].texturetype == 6) continue;
+				for (int f = 0; f < 4; f++)
+				{
+					if (IsClearInDir(Crates, i, j, f)) ArrAddElement1D_Point(ArrPl, PlSize, { i, j } );
+				}
+			}
+		}
+
+		// ВЫБРАЛИ КОНКРЕТНУЮ ВЕТКУ:
+		int RandBrInd = rand() % PlSize;
+		int cX = ArrPl[RandBrInd].x;
+		int cY = ArrPl[RandBrInd].y;
+
+		// ОТБИРАЕМ ВОЗМОЖНЫЕ СТОРОНЫ
+		int sSid = 0;
+		int* Sides = ArrCreate1D_int(sSid);
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (IsClearInDir(Crates, cX, cY, i)) ArrAddElement1D_int(Sides, sSid, i);
+		}
+		// ВЫБРАЛИ КОНКРЕТНОЕ НАПРАВЛЕНИЕ ДВИЖЕНИЯ:
+		int RandDir = Sides[rand()%sSid];
+		
+		int NumOfWays = CountWays(Crates[cX][cY]);
+
+		int wways[3] = { 0 }, v = 0;
+		for (int i = 0; i < 4; i++) if (Crates[cX][cY].ways[i]) { wways[v] = i; v++; }
+
+		if (NumOfWays == 2)
+		{
+			Crates[cX][cY].texturetype = 3;
+			Crates[cX][cY].rotation = 0;
+			SetTexturesAndWays(Crates[cX][cY]);
+
+			bool InCorrect = true;
+			while (InCorrect)
+			{
+				InCorrect = false;
+				for (int h = 0; h < 2; h++) if (!Crates[cX][cY].ways[wways[h]]) InCorrect = true;
+				if (!Crates[cX][cY].ways[RandDir]) InCorrect = true;
+
+				// Вращаем если не подходит
+				if (InCorrect)
+				{
+					cout << "Не подходит. Развернули на 90 градусов\n";
+					Crates[cX][cY].rotation = (Crates[cX][cY].rotation + 90) % 360;
+					Rotate(Crates[cX][cY].ways);
+				}
+			}
+
+			SpawnNextBranch(Crates, cX, cY, RandDir);
+
+		}
+		else if (NumOfWays == 3)
+		{
+			Crates[cX][cY].texturetype = 4;
+			Crates[cX][cY].rotation = 0;
+			SetTexturesAndWays(Crates[cX][cY]);
+
+			SpawnNextBranch(Crates, cX, cY, RandDir);
+		}
+
+		//cout << "ВЕТКИ КОТОРЫЕ МОЖНО РАЗВЕТВЛИТЬ: \n";
+		//for (int s = 0; s < PlSize; s++) cout << "[" << ArrPl[s].x << ";" << ArrPl[s].y << "]\n";
+		//cout << "\nВЫБРАЛИ ВЕТКУ С КОРДАМИ: " << "[" << ArrPl[RandBrInd].x << ";" << ArrPl[RandBrInd].y << "]\n";
+		//cout << "НАПРАВЛЕНИЯ В КОТОРЫХ ЕЁ МОЖНО РАЗВЕТВЛИТЬ: \n";
+		//for (int a = 0; a < sSid; a++) cout << Sides[a] << " ";
+		//cout << "\nВЫБРАННОЕ НАПРАВЛЕНИЕ: " << RandDir << "\n";
+		//cout << "СКОЛЬКО У ПАЛКИ ПУТЕЙ: " << CountWays(Crates[cX][cY]) << "\n";
+		//cout << "Конкретные пути: " << wways[0] << " " << wways[1] << "\n";
+		//cout << "Конкретное направление: " << RandDir << "\n";
+
+		delete[] Sides;
+		delete[] ArrPl;
+	}
+
+	// ПЕРЕТАСОВКА
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			int r = (rand() % 4);
+			Crates[i][j].rotation = (Crates[i][j].rotation + r*90) % 360;
+			for (int k = 0; k < r; k++) Rotate(Crates[i][j].ways);
+		}
+	}
 }
 
 void initCrates(cell** Crates, int lvl)
@@ -453,6 +548,7 @@ void SetTexturesAndWays(cell &cel)
 		cel.ways[0] = 1;
 		cel.ways[1] = 1;
 		cel.ways[2] = 1;
+		cel.ways[3] = 0;
 		break;
 	}
 	case 4:

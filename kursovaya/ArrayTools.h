@@ -28,7 +28,9 @@ void ArrDelete2D_int(int** a, int m);
 void ArrOutput2D_cells(cell** a, int data = 1);
 
 int* ArrCreate1D_int(int size);
-
 void ArrAddElement1D_int(int*& a, int& size, int elem);
-
 void ArrDelElement1D_int(int*& a, int& size, int elem);
+
+SDL_Point* ArrCreate1D_Point(int size);
+void ArrAddElement1D_Point(SDL_Point*& a, int& size, SDL_Point elem);
+void ArrDelElement1D_Point(SDL_Point*& a, int& size, SDL_Point elem);

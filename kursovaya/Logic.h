@@ -31,6 +31,7 @@ void Returnfunc(int _state_);
 void Restartfunc();
 void Cheatfunc();
 void Nextfunc();
+void NextInfinityfunc();
 
 void InfinityFunc();
 // от buttonCLick, функция которая проверяет, нажата ли какая-либо из работающих клавиш
@@ -41,3 +42,9 @@ void CratesClear(cell** Crates);
 void SpawnNextBranch(cell** Crates, int H, int W, int dir);
 
 bool IsClearInDir(cell** Crates, int H, int W, int dir);
+
+bool IsFieldFilled(cell** Crates);
+
+int CountWays(cell cel);
+
+int SearchOneWay(cell cel);

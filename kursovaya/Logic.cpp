@@ -224,6 +224,10 @@ void Nextfunc()
 		RestartLevel();
 	}
 }
+void NextInfinityfunc()
+{
+	Restartfunc();
+}
 
 void InfinityFunc()
 {
@@ -243,7 +247,7 @@ bool ButCl()
 void CratesClear(cell** Crates)
 {
 	//numHcells = numWcells = 3+(rand()%6);
-	numHcells = numWcells = 5;
+	numHcells = numWcells = 4;
 	CRATESIZE = WindW / numWcells;
 	for (int i = 0; i < numWcells; i++)
 	{
@@ -479,4 +483,29 @@ bool IsClearInDir(cell** Crates, int H, int W, int dir)
 	}
 
 	return Clear;
+}
+
+bool IsFieldFilled(cell** Crates)
+{
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			if (Crates[i][j].texturetype == 0) return 0;
+		}
+	}
+	return 1;
+}
+
+int CountWays(cell cel)
+{
+	cnt = 0;
+	for (int i = 0; i < 4; i++) if (cel.ways[i]) cnt++;
+
+	return cnt;
+}
+
+int SearchOneWay(cell cel)
+{
+	for (int i = 0; i < 4; i++) if (cel.ways[i]) return i;
 }

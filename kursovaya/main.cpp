@@ -543,12 +543,12 @@ int main(int args, char** argv)
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &WINDOWrect);
 			}
 
-			//// Œ¡–¿¡Œ“ ¿ –≈∆»Ã¿ –¿«–¿¡Œ“◊» ¿
-			//if (DeveloperMode && !WIN)
-			//{
-			//	SDL_RenderCopy(renderer, cheat_texture, NULL, &cheat_rect);
-			//	if (ishit(cheat_rect, mouseX, mouseY)) { SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &cheat_rect); };
-			//}
+			// Œ¡–¿¡Œ“ ¿ –≈∆»Ã¿ –¿«–¿¡Œ“◊» ¿
+			if (DeveloperMode && !WIN)
+			{
+				SDL_RenderCopy(renderer, cheat_texture, NULL, &cheat_rect);
+				if (ishit(cheat_rect, mouseX, mouseY)) { SDL_SetRenderDrawColor(renderer, 255, 255, 255, Pro3); SDL_RenderFillRect(renderer, &cheat_rect); };
+			}
 
 			// Ÿ≈À◊ » œŒ  À¿¬»ÿ¿Ã
 			if ((event.type == SDL_KEYDOWN))
@@ -570,8 +570,8 @@ int main(int args, char** argv)
 							}
 						}
 					}
-					//if (DeveloperMode && !WIN) ArrAddElement1D_Rect(Rects, RectsSize, cheat_rect);
-					//if (WIN) ArrAddElement1D_Rect(Rects, RectsSize, next_rect);
+					if (DeveloperMode && !WIN) ArrAddElement1D_Rect(Rects, RectsSize, cheat_rect);
+					if (WIN) ArrAddElement1D_Rect(Rects, RectsSize, next_rect);
 
 					CurrentRect = Rects[0];
 					IsFirstCycle = 0;
@@ -597,8 +597,8 @@ int main(int args, char** argv)
 						PlaySound(click);
 						continue;
 					}
-					//else if (!WIN && EqualRects(CurrentRect, cheat_rect)) { Cheatfunc(); ResetKeyNavig(); }
-					//else if (WIN && EqualRects(CurrentRect, next_rect)) { Nextfunc(); ResetKeyNavig(); continue; }
+					else if (!WIN && EqualRects(CurrentRect, cheat_rect)) { Cheatfunc(); ResetKeyNavig(); }
+					else if (WIN && EqualRects(CurrentRect, next_rect)) { NextInfinityfunc(); ResetKeyNavig(); continue; }
 					else if (!WIN) ActionBranches(Crates, 0);
 				}
 			}
@@ -618,7 +618,7 @@ int main(int args, char** argv)
 					if (musicMUTED) Mix_PauseMusic();
 					else Mix_ResumeMusic();
 				}
-				//else if (ishit(cheat_rect, event.button.x, event.button.y) && DeveloperMode && !WIN) Cheatfunc();
+				else if (ishit(cheat_rect, event.button.x, event.button.y) && DeveloperMode && !WIN) Cheatfunc();
 				else if (ishit(restart_rect, event.button.x, event.button.y)) {
 					GamePaused = 0;
 					WIN = 0;
@@ -629,13 +629,13 @@ int main(int args, char** argv)
 					continue; }
 				else if (!GamePaused) ActionBranches(Crates, 1); // —“Œœ «ƒ≈—‹ ≈—À» »√–¿ Õ¿ œ¿”«≈
 
-				//// PAUSED
-				//else if (ishit(next_rect, event.button.x, event.button.y))
-				//{
-				//	Nextfunc();
-				//	ResetKeyNavig();
-				//	continue;
-				//}
+				// PAUSED
+				else if (ishit(next_rect, event.button.x, event.button.y))
+				{
+					NextInfinityfunc();
+					ResetKeyNavig();
+					continue;
+				}
 			}
 
 
@@ -647,7 +647,7 @@ int main(int args, char** argv)
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
 				CountActiveFlowers(Crates);
 				SelectAnimation(Crates);
-				//if (cnt == CntFlowers) WIN = 1;
+				if (cnt == CntFlowers) WIN = 1;
 				if (WIN)
 				{
 					lvlcompleted[lvl] = 1;
@@ -688,6 +688,16 @@ int main(int args, char** argv)
 			{
 				if (ishit(musicRect2, mouseX, mouseY)) SDL_RenderCopy(renderer, musicMutedSelected, NULL, &musicRect2);
 				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect2);
+			}
+			//  ÕŒœ ¿ NEXT
+			if (WIN && (1 <= lvl && lvl < 10))
+			{
+				SDL_RenderCopy(renderer, next_texture, NULL, &next_rect);
+				if (ishit(next_rect, mouseX, mouseY))
+				{
+					SDL_SetRenderDrawColor(renderer, 255, 255, 255, ProZR);
+					SDL_RenderFillRect(renderer, &next_rect);
+				}
 			}
 
 

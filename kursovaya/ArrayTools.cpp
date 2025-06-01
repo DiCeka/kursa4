@@ -139,7 +139,6 @@ int* ArrCreate1D_int(int size)
 
     return a;
 }
-
 void ArrAddElement1D_int(int*& a, int& size, int elem)
 {
     // Ищем такой же элемент
@@ -158,7 +157,6 @@ void ArrAddElement1D_int(int*& a, int& size, int elem)
         a = newarr;
     }
 }
-
 void ArrDelElement1D_int(int*& a, int& size, int elem)
 {
     // Ищем индекс элемента
@@ -171,6 +169,53 @@ void ArrDelElement1D_int(int*& a, int& size, int elem)
     if (ind != -1)
     {
         int* newarr = new int[size - 1];
+        for (int i = 0; i < size; i++)
+        {
+            if (i < ind) newarr[i] = a[i];
+            else if (i > ind) newarr[i] = a[i + 1];
+        }
+        size--;
+        delete[] a;
+        a = newarr;
+    }
+}
+
+SDL_Point* ArrCreate1D_Point(int size)
+{
+    SDL_Point* a = new SDL_Point[size];
+
+    return a;
+}
+void ArrAddElement1D_Point(SDL_Point*& a, int& size, SDL_Point elem)
+{
+    // Ищем такой же элемент
+    int ind = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (a[i].x == elem.x && a[i].y == elem.y) { ind = i;  break; }
+    }
+    if (ind == -1)
+    {
+        SDL_Point* newarr = new SDL_Point[size + 1];
+        for (int i = 0; i < size; i++) newarr[i] = a[i];
+        newarr[size] = elem;
+        size++;
+        delete[] a;
+        a = newarr;
+    }
+}
+void ArrDelElement1D_Point(SDL_Point*& a, int& size, SDL_Point elem)
+{
+    // Ищем индекс элемента
+    int ind = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (a[i].x == elem.x && a[i].y == elem.y) { ind = i; }
+    }
+
+    if (ind != -1)
+    {
+        SDL_Point* newarr = new SDL_Point[size - 1];
         for (int i = 0; i < size; i++)
         {
             if (i < ind) newarr[i] = a[i];
