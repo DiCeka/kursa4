@@ -84,6 +84,10 @@ SDL_Rect LevelRect = {Windrect.x+Windrect.w/2 - (35*M/2-5), 20, 35*M, 8*M};
 SDL_Rect MiniNumRect = {LevelRect.x + 270, 4*M, 3*M, 5*M};
 SDL_Rect MiniNumRect10 = { LevelRect.x + 260, 4*M, 6 * M, 5 * M };
 
+SDL_Rect NumRect = { LevelRect.x + 270, 3 * M, 5 * M, 8 * M };
+SDL_Rect NumRect10 = { LevelRect.x + 250, 3 * M, 8 * M, 8 * M };
+SDL_Rect NumRect100 = { LevelRect.x + 245, 3 * M, 10 * M, 8 * M };
+
 SDL_Texture* level = createTexture("level35x8.png");
 SDL_Texture* mini1 = createTexture("1n.png");
 SDL_Texture* mini2 = createTexture("2n.png");

@@ -505,8 +505,8 @@ int main(int args, char** argv)
 				ArrOutput2D_cells(Crates, 2);
 				cout << "IsActive\n";
 				ArrOutput2D_cells(Crates, 3);
-				cout << "HODI\n";
-				ArrOutput2D_cells(Crates, 4);
+				//cout << "HODI\n";
+				//ArrOutput2D_cells(Crates, 4);
 				cout << "IsAnimating\n";
 				ArrOutput2D_cells(Crates, 5);
 				cout << "\n";
@@ -534,6 +534,15 @@ int main(int args, char** argv)
 			SDL_RenderCopy(renderer, BGtextureGame2, NULL, &WINDOWrect);
 			SDL_RenderCopy(renderer, frametexture, NULL, &framerect);
 			SDL_RenderCopy(renderer, BGframeGame3, NULL, &Windrect);
+			SDL_RenderCopy(renderer, level, NULL, &LevelRect);
+
+			char txt[4];
+			sprintf_s(txt, "%d", (NumOfCompletedInfLevels + 1));
+			SDL_Texture* mainnameTexture = get_text_texture(renderer, txt, my_font);
+			if (NumOfCompletedInfLevels < 9) SDL_RenderCopy(renderer, mainnameTexture, NULL, &NumRect);
+			else if (NumOfCompletedInfLevels >= 9 && NumOfCompletedInfLevels < 99) SDL_RenderCopy(renderer, mainnameTexture, NULL, &NumRect10);
+			else SDL_RenderCopy(renderer, mainnameTexture, NULL, &NumRect100);
+
 			drawCrates(Crates);
 			//
 
@@ -598,7 +607,14 @@ int main(int args, char** argv)
 						continue;
 					}
 					else if (!WIN && EqualRects(CurrentRect, cheat_rect)) { Cheatfunc(); ResetKeyNavig(); }
-					else if (WIN && EqualRects(CurrentRect, next_rect)) { NextInfinityfunc(); ResetKeyNavig(); continue; }
+					else if (WIN && EqualRects(CurrentRect, next_rect)) 
+					{ 
+						NextInfinityfunc(); 
+						ResetKeyNavig(); 
+						NumOfCompletedInfLevels++;
+						if (NumOfCompletedInfLevels % 3 == 0 && NumOfCompletedInfLevels <= 15) InfinityDifficulty = NumOfCompletedInfLevels / 3;
+						continue; 
+					}
 					else if (!WIN) ActionBranches(Crates, 0);
 				}
 			}
@@ -634,6 +650,8 @@ int main(int args, char** argv)
 				{
 					NextInfinityfunc();
 					ResetKeyNavig();
+					NumOfCompletedInfLevels++;
+					if (NumOfCompletedInfLevels % 3 == 0 && NumOfCompletedInfLevels <= 15) InfinityDifficulty = NumOfCompletedInfLevels / 3;
 					continue;
 				}
 			}
@@ -650,9 +668,6 @@ int main(int args, char** argv)
 				if (cnt == CntFlowers) WIN = 1;
 				if (WIN)
 				{
-
-					NumOfCompletedInfLevels++;
-					if (NumOfCompletedInfLevels % 3 == 0 && NumOfCompletedInfLevels <= 15) InfinityDifficulty = NumOfCompletedInfLevels / 3;
 					PlaySound(winsound);
 					GamePaused = 1;
 					ResetKeyNavig();

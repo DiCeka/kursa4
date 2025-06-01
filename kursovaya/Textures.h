@@ -89,6 +89,10 @@ extern SDL_Rect LevelRect;
 extern SDL_Rect MiniNumRect;
 extern SDL_Rect MiniNumRect10;
 
+extern SDL_Rect NumRect;
+extern SDL_Rect NumRect10;
+extern SDL_Rect NumRect100;
+
 extern SDL_Texture* level;
 extern SDL_Texture* mini1;
 extern SDL_Texture* mini2;
