@@ -89,6 +89,9 @@ extern int ArrSpeedOfAnim[6];
 // –¿«¡–Œ— œ–» œŒ»— ≈ ¡À»∆¿…ÿ≈√Œ –≈ “¿
 extern int spread;
 
+extern int InfinityDifficulty;
+extern int NumOfCompletedInfLevels;
+
 
 //extern numsTex ArrNums[10];
 

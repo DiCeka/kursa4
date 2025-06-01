@@ -247,7 +247,7 @@ bool ButCl()
 void CratesClear(cell** Crates)
 {
 	//numHcells = numWcells = 3+(rand()%6);
-	numHcells = numWcells = 4;
+	numHcells = numWcells = 3 + InfinityDifficulty;
 	CRATESIZE = WindW / numWcells;
 	for (int i = 0; i < numWcells; i++)
 	{

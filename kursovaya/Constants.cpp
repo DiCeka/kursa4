@@ -216,3 +216,6 @@ int CurRectInd = 0;
 int ArrSpeedOfAnim[6] = {0, 1, 2, 3, 6, 9};
 
 int spread = 250;
+
+int InfinityDifficulty = 0;
+int NumOfCompletedInfLevels = 0;

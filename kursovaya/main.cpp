@@ -650,7 +650,9 @@ int main(int args, char** argv)
 				if (cnt == CntFlowers) WIN = 1;
 				if (WIN)
 				{
-					lvlcompleted[lvl] = 1;
+
+					NumOfCompletedInfLevels++;
+					if (NumOfCompletedInfLevels % 3 == 0 && NumOfCompletedInfLevels <= 15) InfinityDifficulty = NumOfCompletedInfLevels / 3;
 					PlaySound(winsound);
 					GamePaused = 1;
 					ResetKeyNavig();
