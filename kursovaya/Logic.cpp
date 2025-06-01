@@ -50,6 +50,7 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 	int min_dY = 10000, min_dX = 10000, ind = -1, indZ = -1;
 	int Ccur_X = CenterOfRect(CurrentRect).x;
 	int Ccur_Y = CenterOfRect(CurrentRect).y;
+	bool inSpreadFound = false;
 	switch (dir)
 	{
 	case 0:
@@ -64,11 +65,12 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 			int dX = abs(CurrentRect.x - Rects[i].x);
 
 			// Допустимый "разброс"
-			if (dX <= 75)
+			if (dX <= spread)
 			{
-				if (DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				if (ind == -1 || DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				inSpreadFound = 1;
 			}
-			if (dX < min_dX) { min_dY = dX; indZ = i; }
+			if (dX < min_dX) { min_dX = dX; indZ = i; }
 			else if (dX == min_dX)
 			{
 				if (CenterOfRect(Rects[ind]).y < Ci_Y) indZ = i;
@@ -89,9 +91,10 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 
 			int dY = abs(CurrentRect.y - Rects[i].y);
 
-			if (dY <= 70)
+			if (dY <= spread)
 			{
-				if (DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				if (ind == -1 || DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				inSpreadFound = 1;
 			}
 			if (dY < min_dY) { min_dY = dY; indZ = i; }
 			else if (dY == min_dY)
@@ -112,11 +115,14 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 			if (Ci_Y <= Ccur_Y) continue;
 			int dX = abs(CurrentRect.x - Rects[i].x);
 			// Допустимый "разброс"
-			if (dX <= 75) 
+			int sprd = spread;
+			if (state == 0) sprd = 320;
+			if (dX <= sprd)
 			{
-				if (DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				if (ind == -1 || DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				inSpreadFound = 1;
 			}
-			if (dX < min_dX) { min_dY = dX; indZ = i; }
+			if (dX < min_dX) { min_dX = dX; indZ = i; }
 			else if (dX == min_dX)
 			{
 				if (CenterOfRect(Rects[ind]).y > Ci_Y) indZ = i;
@@ -134,9 +140,10 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 
 			if (Ci_X >= Ccur_X) continue;
 			int dY = abs(CurrentRect.y - Rects[i].y);
-			if (dY <= 70)
+			if (dY <= spread)
 			{
-				if (DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				if (ind == -1 || DistanceBetwRects(CurrentRect, Rects[i]) < DistanceBetwRects(CurrentRect, Rects[ind])) ind = i;
+				inSpreadFound = 1;
 			}
 			if (dY < min_dY) { min_dY = dY; indZ = i; }
 			else if (dY == min_dY)
@@ -147,8 +154,8 @@ void GoToClosestRect(SDL_Rect* Rects, SDL_Rect& CurrentRect, int dir)
 		break;
 	}
 	}
-	if (ind > -1) { CurrentRect = Rects[ind]; PlaySound(whoosh); }
-	else if (ind == -1 && indZ != -1) { CurrentRect = Rects[indZ]; PlaySound(whoosh); }
+	if (inSpreadFound) { CurrentRect = Rects[ind]; PlaySound(whoosh); }
+	else if (!inSpreadFound && indZ != -1) { CurrentRect = Rects[indZ]; PlaySound(whoosh); }
 }
 
 double DistanceBetwRects(SDL_Rect Rect1, SDL_Rect Rect2)
@@ -188,9 +195,9 @@ void Musicfunc()
 	if (musicMUTED) Mix_VolumeMusic(0);
 	else Mix_VolumeMusic(128);
 }
-void Returnfunc()
+void Returnfunc(int _state_)
 {
-	ChangeState(state-1); 
+	ChangeState(_state_); 
 	PlaySound(click);
 	WIN = 0;
 	system("cls");
@@ -216,6 +223,13 @@ void Nextfunc()
 		lvl++;
 		RestartLevel();
 	}
+}
+
+void InfinityFunc()
+{
+	PlaySound(click);
+	RestartLevel();
+	ChangeState(3);
 }
 
 bool ButCl()

@@ -14,6 +14,17 @@ int** ArrCreate2D_int(int rows, int cols)
     return a;
 }
 
+cell** ArrSimpleCreate2D_cell(int size)
+{
+    cell** a = new cell* [size];
+    for (int i = 0; i < size; i++)
+    {
+        a[i] = new cell[size];
+    }
+
+    return a;
+}
+
 cell** ArrCreate2D_cell()
 {
     int mx = 0;

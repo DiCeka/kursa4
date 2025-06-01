@@ -12,12 +12,19 @@ SDL_Texture** mininums[10] = { 0, &mini1, &mini2, &mini3, &mini4, &mini5, &mini6
 //
 SDL_Texture* BGtextureGame1 = createTexture("fon2.bmp");
 SDL_Texture* BGtextureMenu1 = createTexture("fon3.bmp");
+SDL_Texture* BGtextureGame2 = createTexture("fon4.png");
+SDL_Texture* BGframeGame2 = createTexture("bgGame2.png");
+SDL_Texture* BGframeGame3 = createTexture("bgGame3br.png"); // "bgGame3.png" чтобы не так €рко
 SDL_Texture* cratetexture = createTexture("crate.bmp");
 SDL_Texture* nametexture = createTexture("BRANCHES.bmp");
 SDL_Rect namerect = { 160, 200, 70 * M, 16 * M };
 SDL_Texture* CTAPTtexture = createTexture("CTAPT.bmp");
 SDL_Texture* CTAPTselectedtexture = createTexture("CTAPTselected.bmp");
 SDL_Rect CTAPTrect = { 26 * M, 20 * M + 20 * M, 50 * M, 16 * M };
+
+SDL_Texture* Infinitytexture = createTexture("Infinity31x13.png");
+SDL_Rect InfinityRect = { 34 * M, 20 * M * 2 + 19*M, 31 * M, 13 * M };
+
 SDL_Texture* frametexture = createTexture("frame68.bmp", true);
 SDL_Rect framerect = { 140, 90, 68 * M, 68 * M };
 SDL_Texture* BGtexture3 = createTexture("bg3.bmp", true);

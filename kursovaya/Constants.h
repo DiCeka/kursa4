@@ -10,7 +10,7 @@ extern bool DeveloperMode;
 
 extern bool AnimationIsON;
 
-extern int SpeedOfAnimation;
+extern int AnimationSpeed;
 
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
@@ -85,7 +85,9 @@ extern SDL_Rect* Rects;
 extern SDL_Rect CurrentRect;
 extern int CurRectInd;
 
-extern int ArrSpeedOfAnim[6	];
+extern int ArrSpeedOfAnim[6];
+// –¿«¡–Œ— œ–» œŒ»— ≈ ¡À»∆¿…ÿ≈√Œ –≈ “¿
+extern int spread;
 
 
 //extern numsTex ArrNums[10];

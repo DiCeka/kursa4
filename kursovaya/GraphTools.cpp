@@ -2,6 +2,14 @@
 #include "GraphTools.h"
 
 
+void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
+{
+	CntFlowers = 0;
+	numWcells = numHcells = 5; // Рандом добавь сюда потом
+	CRATESIZE = WindW / numWcells;
+
+
+}
 
 void initCrates(cell** Crates, int lvl)
 {
@@ -128,7 +136,7 @@ void drawCrates(cell** Crates)
 		{
 			if (Crates[i][j].IsAnimating)
 			{
-				Crates[i][j].rotation += ArrSpeedOfAnim[SpeedOfAnimation];
+				Crates[i][j].rotation += ArrSpeedOfAnim[AnimationSpeed];
 
 				if (Crates[i][j].rotation % 90 == 0)
 				{
@@ -139,7 +147,6 @@ void drawCrates(cell** Crates)
 					RefreshBranches(Crates);
 				}
 			}
-
 
 			SDL_RenderCopyEx(renderer, Crates[i][j].texture, NULL, &Crates[i][j].rect, Crates[i][j].rotation, NULL, SDL_FLIP_NONE);
 		}
@@ -196,7 +203,6 @@ void ActionBranches(cell** Crates, bool click)
 				if (AnimationIsON)
 				{
 					Crates[i][j].IsAnimating++;
-					if (Crates[i][j].texturetype != 6) Crates[i][j].IsActive = 0;
 					RefreshBranches(Crates);
 				}
 				else
@@ -221,11 +227,11 @@ void ActionBranches(cell** Crates, bool click)
 void RefreshBranches(cell** Crates)
 {
 	TurnOffAllBranches(Crates);
-	for (int ii = 0; ii < numWcells; ii++)
+	for (int i = 0; i < numWcells; i++)
 	{
-		for (int jj = 0; jj < numHcells; jj++)
+		for (int j = 0; j < numHcells; j++)
 		{
-			if (Crates[ii][jj].texturetype == 6) ActivationFromRoot(Crates, ii, jj, ((Crates[ii][jj].rotation/90) + 2) % 4);
+			if (Crates[i][j].texturetype == 6) ActivationFromRoot(Crates, i, j, ((Crates[i][j].rotation/90) + 2) % 4);
 		}
 	}
 	NeedTo_();

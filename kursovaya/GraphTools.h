@@ -9,6 +9,8 @@
 #include "Logic.h"
 using namespace std;
 
+void GenerateRandomLevel(cell** Crates, int NumberOfRoots);
+
 void initCrates(cell** Crates, int lvl);
 
 void drawCrates(cell** Crates);

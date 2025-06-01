@@ -9,6 +9,8 @@ using namespace std;
 
 int** ArrCreate2D_int(int rows, int cols);
 
+cell** ArrSimpleCreate2D_cell(int size);
+
 cell** ArrCreate2D_cell();
 
 SDL_Rect* ArrCreate1D_Rect(int size);

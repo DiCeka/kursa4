@@ -17,12 +17,19 @@ extern SDL_Texture** mininums[10];
 //
 extern SDL_Texture* BGtextureGame1;
 extern SDL_Texture* BGtextureMenu1;
+extern SDL_Texture* BGtextureGame2;
+extern SDL_Texture* BGframeGame2;
+extern SDL_Texture* BGframeGame3;
 extern SDL_Texture* cratetexture;
 extern SDL_Texture* nametexture;
 extern SDL_Rect namerect;
 extern SDL_Texture* CTAPTtexture;
 extern SDL_Texture* CTAPTselectedtexture;
 extern SDL_Rect CTAPTrect;
+
+extern SDL_Texture* Infinitytexture;
+extern SDL_Rect InfinityRect;
+
 extern SDL_Texture* frametexture;
 extern SDL_Rect framerect;
 extern SDL_Texture* BGtexture3;

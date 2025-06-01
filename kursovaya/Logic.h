@@ -27,9 +27,11 @@ bool EqualRects(SDL_Rect rect1, SDL_Rect rect2);
 void CTAPTfunc();
 void Mutefunc();
 void Musicfunc();
-void Returnfunc();
+void Returnfunc(int _state_);
 void Restartfunc();
 void Cheatfunc();
 void Nextfunc();
+
+void InfinityFunc();
 // от buttonCLick, функция которая проверяет, нажата ли какая-либо из работающих клавиш
 bool ButCl();
