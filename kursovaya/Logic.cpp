@@ -239,3 +239,244 @@ bool ButCl()
 		event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a ) return 1;
 	return 0;
 }
+
+void CratesClear(cell** Crates)
+{
+	//numHcells = numWcells = 3+(rand()%6);
+	numHcells = numWcells = 5;
+	CRATESIZE = WindW / numWcells;
+	for (int i = 0; i < numWcells; i++)
+	{
+		for (int j = 0; j < numHcells; j++)
+		{
+			Crates[i][j].IsActive = 0;
+			Crates[i][j].IsAnimating = 0;
+			Crates[i][j].rect = { WindX + j * CRATESIZE, WindY + i * CRATESIZE, CRATESIZE, CRATESIZE };
+			Crates[i][j].rotation = 0;
+			Crates[i][j].texture = 0;
+			Crates[i][j].texturetype = 0;
+			for (int k = 0; k < 4; k++) Crates[i][j].ways[k] = 0;
+			SetTexturesAndWays(Crates[i][j]);
+		}
+	}
+}
+
+void SpawnNextBranch(cell** Crates, int H, int W, int dir)
+{
+	// Íàõîäèì êîîðäèíàòû íàøåé âåòêè
+	int h = H, w = W;
+	switch (dir)
+	{
+	case 0: { h--; break; }
+	case 1: { w++; break; }
+	case 2: { h++; break; }
+	case 3: { w--; break; }
+	}
+
+
+	//         ÏÐÎÂÅÐßÅÌ ÑÂÎÁÎÄÍÎÑÒÜ ÑÒÎÐÎÍ:
+	
+	// ÎÒÁÈÐÀÅÌ ÂÎÇÌÎÆÍÛÅ ÑÒÎÐÎÍÛ
+	int sSid = 0;
+	int* Sides = ArrCreate1D_int(sSid);
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (i == (dir + 2) % 4) continue; // Ìû îòñþäà ïðèøëè
+		if (IsClearInDir(Crates, h, w, i)) ArrAddElement1D_int(Sides, sSid, i);
+	}
+
+	if (sSid)
+	{
+		int ind = rand() % sSid;
+		switch (Sides[ind])
+		{
+		case 0:
+		{
+			switch (dir)
+			{
+			case 0: 
+			{
+				Crates[h][w].texturetype = 1;
+				Crates[h][w].rotation = 0;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 1:
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 180;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 2:
+			{
+				cout << "ÎØÈÁÊÀ!!!! ÏÎÏÛÒÊÀ ÇÀÑÏÀÂÍÈÒÜ ÒÀÌ, ÎÒÊÓÄÀ ÏÐÈØËÈ!!!!!!!!\n";
+				break;
+			}
+			case 3:
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 270;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			}
+			break;
+		}
+		case 1:
+		{
+			switch (dir)
+			{
+			case 0: // Êîðåíü ñíèçó
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 0;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 1: // Êîðåíü ñëåâà
+			{
+				Crates[h][w].texturetype = 1;
+				Crates[h][w].rotation = 90;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 2: // Êîðåíü ñâåðõó
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 270;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 3: // Êîðåíü ñïðàâà
+			{
+				cout << "ÎØÈÁÊÀ!!!! ÏÎÏÛÒÊÀ ÇÀÑÏÀÂÍÈÒÜ ÒÀÌ, ÎÒÊÓÄÀ ÏÐÈØËÈ!!!!!!!!\n";
+				break;
+			}
+			}
+			break;
+		}
+		case 2:
+		{
+			switch (dir)
+			{
+			case 0:
+			{
+				cout << "ÎØÈÁÊÀ!!!! ÏÎÏÛÒÊÀ ÇÀÑÏÀÂÍÈÒÜ ÒÀÌ, ÎÒÊÓÄÀ ÏÐÈØËÈ!!!!!!!!\n";
+				break;
+			}
+			case 1:
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 90;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 2:
+			{
+				Crates[h][w].texturetype = 1;
+				Crates[h][w].rotation = 0;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 3:
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 0;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			}
+			break;
+		}
+		case 3:
+		{
+			switch (dir)
+			{
+			case 0:
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 90;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 1:
+			{
+				cout << "ÎØÈÁÊÀ!!!! ÏÎÏÛÒÊÀ ÇÀÑÏÀÂÍÈÒÜ ÒÀÌ, ÎÒÊÓÄÀ ÏÐÈØËÈ!!!!!!!!\n";
+				break;
+			}
+			case 2:
+			{
+				Crates[h][w].texturetype = 2;
+				Crates[h][w].rotation = 180;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			case 3:
+			{
+				Crates[h][w].texturetype = 1;
+				Crates[h][w].rotation = 90;
+				SetTexturesAndWays(Crates[h][w]);
+				SpawnNextBranch(Crates, h, w, Sides[ind]);
+				break;
+			}
+			}
+			break;
+		}
+		}
+	}
+	else // ÅÑËÈ ÂÛÕÎÄÀ ÍÅÒ ÒÎ ÑÏÀÂÍ ÖÂÅÒÊÀ
+	{
+		Crates[h][w].texturetype = 5;
+		Crates[h][w].rotation = dir*90;
+		SetTexturesAndWays(Crates[h][w]);
+	}
+
+	delete[] Sides;
+}
+
+bool IsClearInDir(cell** Crates, int H, int W, int dir)
+{
+	bool Clear = 1;
+	switch (dir)
+	{
+	case 0:
+	{
+		if ((H - 1) < 0) Clear = 0;
+		else if (Crates[H-1][W].texturetype != 0) Clear = 0;
+		break;
+	}
+	case 1:
+	{
+		if ((W + 1) == numWcells) Clear = 0;
+		else if (Crates[H][W+1].texturetype != 0) Clear = 0;
+		break;
+	}
+	case 2:
+	{
+		if ((H+1) == numHcells) Clear = 0;
+		else if (Crates[H+1][W].texturetype != 0) Clear = 0;
+		break;
+	}
+	case 3:
+	{
+		if ((W - 1) < 0) Clear = 0;
+		else if (Crates[H][W - 1].texturetype != 0) Clear = 0;
+		break;
+	}
+	}
+
+	return Clear;
+}

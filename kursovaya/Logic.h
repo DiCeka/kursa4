@@ -35,3 +35,9 @@ void Nextfunc();
 void InfinityFunc();
 // от buttonCLick, функция которая проверяет, нажата ли какая-либо из работающих клавиш
 bool ButCl();
+
+void CratesClear(cell** Crates);
+
+void SpawnNextBranch(cell** Crates, int H, int W, int dir);
+
+bool IsClearInDir(cell** Crates, int H, int W, int dir);

@@ -21,7 +21,7 @@ cell** Crates = ArrCreate2D_cell();
 int numWcells = 5;
 int numHcells = 5;
 
-int CRATESIZE = WindW / numWcells;
+int CRATESIZE;
 
 int mouseX = 0, mouseY = 0;
 
@@ -29,7 +29,7 @@ SDL_Event event = { 0 };
 
 int state = 0;
 
-int lvl = 0;
+int lvl = 5;
 
 bool muteMUTED = false;
 bool musicMUTED = false;

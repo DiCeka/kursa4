@@ -4,9 +4,31 @@
 
 void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
 {
+	//numHcells = numWcells = 5;
+	//CRATESIZE = WindW / numWcells;
+	int CntRoots = NumberOfRoots;
 	CntFlowers = 0;
-	numWcells = numHcells = 5; // Рандом добавь сюда потом
-	CRATESIZE = WindW / numWcells;
+	int ii = 0, jj = 0;
+	int rot;
+
+	while (CntRoots)
+	{
+		ii = rand() % numHcells;
+		jj = rand() % numWcells;
+		rot = rand() % 4;
+
+		if (Crates[ii][ii].texturetype == 0 && IsClearInDir(Crates, ii, jj, ( (rot + 2) % 4) ) )
+		{
+			Crates[ii][jj].texturetype = 6;
+			Crates[ii][jj].rotation = rot * 90;
+			SetTexturesAndWays(Crates[ii][jj]);
+
+			SpawnNextBranch(Crates, ii, jj, ((rot + 2) % 4) );
+
+
+			CntRoots--;
+		}
+	}
 
 
 }
@@ -26,57 +48,9 @@ void initCrates(cell** Crates, int lvl)
 			else Crates[i][j].rotation = 0;
 			Crates[i][j].IsActive = 0;
 			Crates[i][j].IsAnimating = 0;
-			for (int k = 0; k < 4; k++)
-				Crates[i][j].ways[k] = 0;
-			switch (Crates[i][j].texturetype)
-			{
-			case 0: Crates[i][j].texture = none; break;
-			case 1: 
-			{ 
-				Crates[i][j].texture = br1na; 
-				Crates[i][j].ways[0] = 1;
-				Crates[i][j].ways[2] = 1;
-				break; 
-			}
-			case 2: 
-			{ 
-				Crates[i][j].texture = br2na; 
-				Crates[i][j].ways[1] = 1;
-				Crates[i][j].ways[2] = 1;
-				break; 
-			}
-			case 3: 
-			{ 
-				Crates[i][j].texture = br3na; 
-				Crates[i][j].ways[0] = 1;
-				Crates[i][j].ways[1] = 1;
-				Crates[i][j].ways[2] = 1;
-				break; 
-			}
-			case 4: 
-			{
-				Crates[i][j].texture = br4na; 
-				Crates[i][j].ways[0] = 1;
-				Crates[i][j].ways[1] = 1;
-				Crates[i][j].ways[2] = 1;
-				Crates[i][j].ways[3] = 1;
-				break;
-			}
-			case 5: 
-			{ 
-				Crates[i][j].texture = brFlowerna; 
-				Crates[i][j].ways[2] = 1;
-				CntFlowers++;
-				break; 
-			}
-			case 6: 
-			{ 
-				Crates[i][j].texture = brRoot; 
-				Crates[i][j].IsActive = 1; 
-				Crates[i][j].ways[2] = 1;
-				break; }
-			}
-			for (int h = 0; h < (Crates[i][j].rotation/90); h++) Rotate(Crates[i][j].ways);
+			for (int k = 0; k < 4; k++) Crates[i][j].ways[k] = 0;
+
+			SetTexturesAndWays(Crates[i][j]);
 		}
 	}
 }
@@ -192,11 +166,11 @@ void ActionBranches(cell** Crates, bool click)
 			bool GO = 0;
 			if (click)
 			{
-				if (ishit(Crates[i][j].rect, event.button.x, event.button.y)) GO = 1;
+				if (ishit(Crates[i][j].rect, event.button.x, event.button.y) && Crates[i][j].texturetype != 0) GO = 1;
 			}
 			else
 			{
-				if (EqualRects(CurrentRect, Crates[i][j].rect)) GO = 1;
+				if (EqualRects(CurrentRect, Crates[i][j].rect) && Crates[i][j].texturetype != 0) GO = 1;
 			}
 			if (GO)
 			{
@@ -452,4 +426,55 @@ void SelectAnimation(cell** Crates)
 			}
 		}
 	}
+}
+
+void SetTexturesAndWays(cell &cel)
+{
+	switch (cel.texturetype)
+	{
+	case 0: cel.texture = none; break;
+	case 1:
+	{
+		cel.texture = br1na;
+		cel.ways[0] = 1;
+		cel.ways[2] = 1;
+		break;
+	}
+	case 2:
+	{
+		cel.texture = br2na;
+		cel.ways[1] = 1;
+		cel.ways[2] = 1;
+		break;
+	}
+	case 3:
+	{
+		cel.texture = br3na;
+		cel.ways[0] = 1;
+		cel.ways[1] = 1;
+		cel.ways[2] = 1;
+		break;
+	}
+	case 4:
+	{
+		cel.texture = br4na;
+		for (int k = 0; k < 4; k++) cel.ways[k] = 1;
+		break;
+	}
+	case 5:
+	{
+		cel.texture = brFlowerna;
+		cel.ways[2] = 1;
+		CntFlowers++;
+		break;
+	}
+	case 6:
+	{
+		cel.texture = brRoot;
+		cel.IsActive = 1;
+		cel.ways[2] = 1;
+		break;
+	}
+	}
+	for (int h = 0; h < (cel.rotation / 90); h++) Rotate(cel.ways);
 }

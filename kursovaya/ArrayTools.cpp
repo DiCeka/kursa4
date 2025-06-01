@@ -132,3 +132,52 @@ void ArrOutput2D_cells(cell** a, int data)
         cout << "\n";
     }
 }
+
+int* ArrCreate1D_int(int size)
+{
+    int* a = new int[size];
+
+    return a;
+}
+
+void ArrAddElement1D_int(int*& a, int& size, int elem)
+{
+    // Ищем такой же элемент
+    int ind = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (a[i] == elem) { ind = i;  break; }
+    }
+    if (ind == -1)
+    {
+        int* newarr = new int[size + 1];
+        for (int i = 0; i < size; i++) newarr[i] = a[i];
+        newarr[size] = elem;
+        size++;
+        delete[] a;
+        a = newarr;
+    }
+}
+
+void ArrDelElement1D_int(int*& a, int& size, int elem)
+{
+    // Ищем индекс элемента
+    int ind = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (a[i] == elem) { ind = i; }
+    }
+
+    if (ind != -1)
+    {
+        int* newarr = new int[size - 1];
+        for (int i = 0; i < size; i++)
+        {
+            if (i < ind) newarr[i] = a[i];
+            else if (i > ind) newarr[i] = a[i + 1];
+        }
+        size--;
+        delete[] a;
+        a = newarr;
+    }
+}

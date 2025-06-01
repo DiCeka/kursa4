@@ -45,3 +45,5 @@ void ActivateAll(cell** Crates);
 void CountActiveFlowers(cell** Crates);
 
 void SelectAnimation(cell** Crates);
+
+void SetTexturesAndWays(cell &cel);
