@@ -92,13 +92,9 @@ int main(int args, char** argv)
 			if (Pro3 == 200) FP = 0;
 			else if (Pro3 == 100) FP = 1;
 		}
-		if (!Mix_PlayingMusic())
-		{
-			Mix_PlayMusic(tracks[(CurrentTrack+1)%3], 1);
-		}
+		if (!Mix_PlayingMusic()) Mix_PlayMusic(tracks[(CurrentTrack+1)%3], 1);
 
-
-		// ÃËÀÂÍÎÅ ÌÅÍŞ //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// ÃËÀÂÍÎÅ ÌÅÍŞ ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		if (state == 0)
 		{
 			// ÑÍÀ×ÀËÀ ÔÎÍ À ÏÎÒÎÌ ÎÑÒÀËÜÍÎÅ
@@ -187,12 +183,9 @@ int main(int args, char** argv)
 				SDL_RenderFillRect(renderer, &CurrentRect);
 				SDL_RenderCopy(renderer, selecter_texture, NULL, &CurrentRect);
 			}
-			
-			//SDL_RenderCopy(renderer, mainnameTexture, NULL, &MainText); // Øğèôò
-
 		}
 
-		// ÌÅÍŞ ÂÛÁÎĞÀ ÓĞÎÂÍß //////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// ÌÅÍŞ ÂÛÁÎĞÀ ÓĞÎÂÍß /////////////////////////////////////////////////////////////////////////////////////////////////
 		else if (state == 1)
 		{
 			SDL_RenderCopy(renderer, BGtextureMenu1, NULL, &WINDOWrect);
@@ -295,7 +288,7 @@ int main(int args, char** argv)
 			}
 		}
 
-		// ÑÀÌÀ ÈÃĞÀ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// ÑÀÌÀ ÈÃĞÀ //////////////////////////////////////////////////////////////////////////////////////////////////////////
 		else if (state == 2)
 		{
 			// Ñãåíåğèğîâàòü óğîâåíü
@@ -517,7 +510,7 @@ int main(int args, char** argv)
 			///
 		}
 
-		// ÁÅÑÊÎÍÅ×ÍÛÉ ĞÅÆÈÌ ///////////////////////////////////////////////////////////////////////////////////////////////////////
+		// ÁÅÑÊÎÍÅ×ÍÛÉ ĞÅÆÈÌ //////////////////////////////////////////////////////////////////////////////////////////////////
 		else if (state == 3)
 		{
 			// Ñãåíåğèğîâàòü óğîâåíü
@@ -542,6 +535,7 @@ int main(int args, char** argv)
 			if (NumOfCompletedInfLevels < 9) SDL_RenderCopy(renderer, mainnameTexture, NULL, &NumRect);
 			else if (NumOfCompletedInfLevels >= 9 && NumOfCompletedInfLevels < 99) SDL_RenderCopy(renderer, mainnameTexture, NULL, &NumRect10);
 			else SDL_RenderCopy(renderer, mainnameTexture, NULL, &NumRect100);
+			SDL_DestroyTexture(mainnameTexture);
 
 			drawCrates(Crates);
 			//
@@ -707,7 +701,7 @@ int main(int args, char** argv)
 				else SDL_RenderCopy(renderer, musicMuted, NULL, &musicRect2);
 			}
 			// ÊÍÎÏÊÀ NEXT
-			if (WIN && (1 <= lvl && lvl < 10))
+			if (WIN)
 			{
 				SDL_RenderCopy(renderer, next_texture, NULL, &next_rect);
 				if (ishit(next_rect, mouseX, mouseY))
@@ -747,6 +741,7 @@ int main(int args, char** argv)
 			}
 			///
 		}
+
 		SDL_RenderPresent(renderer);
 	}
 

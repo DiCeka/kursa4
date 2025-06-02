@@ -4,8 +4,6 @@
 
 void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
 {
-	//numHcells = numWcells = 5;
-	//CRATESIZE = WindW / numWcells;
 	int CntRoots = NumberOfRoots;
 	CntFlowers = 0;
 	int ii = 0, jj = 0;
@@ -102,16 +100,6 @@ void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
 			SpawnNextBranch(Crates, cX, cY, RandDir);
 		}
 
-		//cout << "ÂÅÒÊÈ ÊÎÒÎÐÛÅ ÌÎÆÍÎ ÐÀÇÂÅÒÂËÈÒÜ: \n";
-		//for (int s = 0; s < PlSize; s++) cout << "[" << ArrPl[s].x << ";" << ArrPl[s].y << "]\n";
-		//cout << "\nÂÛÁÐÀËÈ ÂÅÒÊÓ Ñ ÊÎÐÄÀÌÈ: " << "[" << ArrPl[RandBrInd].x << ";" << ArrPl[RandBrInd].y << "]\n";
-		//cout << "ÍÀÏÐÀÂËÅÍÈß Â ÊÎÒÎÐÛÕ Å¨ ÌÎÆÍÎ ÐÀÇÂÅÒÂËÈÒÜ: \n";
-		//for (int a = 0; a < sSid; a++) cout << Sides[a] << " ";
-		//cout << "\nÂÛÁÐÀÍÍÎÅ ÍÀÏÐÀÂËÅÍÈÅ: " << RandDir << "\n";
-		//cout << "ÑÊÎËÜÊÎ Ó ÏÀËÊÈ ÏÓÒÅÉ: " << CountWays(Crates[cX][cY]) << "\n";
-		//cout << "Êîíêðåòíûå ïóòè: " << wways[0] << " " << wways[1] << "\n";
-		//cout << "Êîíêðåòíîå íàïðàâëåíèå: " << RandDir << "\n";
-
 		delete[] Sides;
 		delete[] ArrPl;
 	}
@@ -190,7 +178,6 @@ void drawCrates(cell** Crates)
 		NeedToRefreshCrates = 0;
 	}
 
-
 	for (int i = 0; i < numWcells; i++)
 	{
 		for (int j = 0; j < numHcells; j++)
@@ -208,11 +195,9 @@ void drawCrates(cell** Crates)
 					RefreshBranches(Crates);
 				}
 			}
-
 			SDL_RenderCopyEx(renderer, Crates[i][j].texture, NULL, &Crates[i][j].rect, Crates[i][j].rotation, NULL, SDL_FLIP_NONE);
 		}
 	}
-
 }
 
 bool ishit(SDL_Rect rect, int x, int y)
@@ -268,7 +253,6 @@ void ActionBranches(cell** Crates, bool click)
 				}
 				else
 				{
-
 					Crates[i][j].rotation = (Crates[i][j].rotation + 90) % 360;
 					Rotate(Crates[i][j].ways);
 

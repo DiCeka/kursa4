@@ -1,13 +1,13 @@
 #pragma once
 #include "Constants.h"
 
-bool DeveloperMode = 1;
+bool DeveloperMode = 0;
 
 bool AnimationIsON = 1;
 // Число от 1 до 5. 1 - медленно, 5 - быстро
 int AnimationSpeed = 3;
 
-SDL_Window* window = SDL_CreateWindow(u8"Ветки",
+SDL_Window* window = SDL_CreateWindow(u8"BRANCHES",
 	SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 	WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
