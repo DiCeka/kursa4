@@ -522,3 +522,9 @@ void RandomizeRotates(cell** Crates)
 		}
 	}
 }
+
+void IncreaseInfLevels()
+{
+	NumOfCompletedInfLevels++;
+	if (NumOfCompletedInfLevels % 2 == 0 && NumOfCompletedInfLevels <= 40) InfinityDifficulty = NumOfCompletedInfLevels / 2;
+}

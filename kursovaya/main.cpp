@@ -601,12 +601,11 @@ int main(int args, char** argv)
 						continue;
 					}
 					else if (!WIN && EqualRects(CurrentRect, cheat_rect)) { Cheatfunc(); ResetKeyNavig(); }
-					else if (WIN && EqualRects(CurrentRect, next_rect)) 
+					else if (WIN && EqualRects(CurrentRect, next_rect))
 					{ 
 						NextInfinityfunc(); 
 						ResetKeyNavig(); 
-						NumOfCompletedInfLevels++;
-						if (NumOfCompletedInfLevels % 3 == 0 && NumOfCompletedInfLevels <= 15) InfinityDifficulty = NumOfCompletedInfLevels / 3;
+						IncreaseInfLevels();
 						continue; 
 					}
 					else if (!WIN) ActionBranches(Crates, 0);
@@ -644,8 +643,7 @@ int main(int args, char** argv)
 				{
 					NextInfinityfunc();
 					ResetKeyNavig();
-					NumOfCompletedInfLevels++;
-					if (NumOfCompletedInfLevels % 3 == 0 && NumOfCompletedInfLevels <= 15) InfinityDifficulty = NumOfCompletedInfLevels / 3;
+					IncreaseInfLevels();
 					continue;
 				}
 			}
@@ -723,20 +721,23 @@ int main(int args, char** argv)
 			// консоль
 			if (NeedToChangeConsole)
 			{
-				system("cls");
-				cout << "Кол-во цветов: " << CntFlowers << "\n";
-				cout << "Актив  цветов: " << cnt << "\n\n";
-				cout << "TextureType\n";
-				ArrOutput2D_cells(Crates);
-				cout << "Rotation\n";
-				ArrOutput2D_cells(Crates, 2);
-				cout << "IsActive\n";
-				ArrOutput2D_cells(Crates, 3);
-				cout << "IsAnimating\n";
-				ArrOutput2D_cells(Crates, 5);
-				cout << "\n";
-				//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
-
+				if (numWcells <= 10)
+				{
+					system("cls");
+					cout << "Уровней пройдено: " << NumOfCompletedInfLevels << "\n";
+					cout << "Кол-во цветов: " << CntFlowers << "\n";
+					cout << "Актив  цветов: " << cnt << "\n\n";
+					cout << "TextureType\n";
+					ArrOutput2D_cells(Crates);
+					cout << "Rotation\n";
+					ArrOutput2D_cells(Crates, 2);
+					cout << "IsActive\n";
+					ArrOutput2D_cells(Crates, 3);
+					cout << "IsAnimating\n";
+					ArrOutput2D_cells(Crates, 5);
+					cout << "\n";
+					//cout << "x: " << restart_rect.x << "\ny: " << restart_rect.y << "\n";
+				}
 				NeedToChangeConsole = 0;
 			}
 			///

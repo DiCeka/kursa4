@@ -82,7 +82,6 @@ void GenerateRandomLevel(cell** Crates, int NumberOfRoots)
 				// Вращаем если не подходит
 				if (InCorrect)
 				{
-					cout << "Не подходит. Развернули на 90 градусов\n";
 					Crates[cX][cY].rotation = (Crates[cX][cY].rotation + 90) % 360;
 					Rotate(Crates[cX][cY].ways);
 				}

@@ -50,3 +50,5 @@ int CountWays(cell cel);
 int SearchOneWay(cell cel);
 
 void RandomizeRotates(cell** Crates);
+
+void IncreaseInfLevels();

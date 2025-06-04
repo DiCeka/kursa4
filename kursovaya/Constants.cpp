@@ -1,7 +1,7 @@
 #pragma once
 #include "Constants.h"
 
-bool DeveloperMode = 0;
+bool DeveloperMode = 1;
 
 bool AnimationIsON = 1;
 // Число от 1 до 5. 1 - медленно, 5 - быстро
@@ -15,7 +15,7 @@ SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
 
 SDL_Rect Windrect = { WindX, WindY, WindW, WindH };
 
-cell** Crates = ArrCreate2D_cell();
+cell** Crates = ArrCreate2D_cell(20);
 
 
 int numWcells = 5;

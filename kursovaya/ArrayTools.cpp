@@ -25,18 +25,23 @@ cell** ArrSimpleCreate2D_cell(int size)
     return a;
 }
 
-cell** ArrCreate2D_cell()
+cell** ArrCreate2D_cell(int size)
 {
-    int mx = 0;
-    for (int i = 0; i < 11; i++)
+    int siz;
+    if (size) siz = size;
+    else
     {
-        if (mx < LvlSizes[i]) mx = LvlSizes[i];
+        int mx = 0;
+        for (int i = 0; i < 11; i++)
+        {
+            if (mx < LvlSizes[i]) mx = LvlSizes[i];
+        }
     }
-    cell** a = new cell* [mx]; // тут был numHcells, дальше везде numWcells
 
-    for (int i = 0; i < mx; i++)
+    cell** a = new cell * [siz];
+    for (int i = 0; i < siz; i++)
     {
-        a[i] = new cell[mx];
+        a[i] = new cell[siz];
     }
 
     return a;
@@ -123,7 +128,7 @@ void ArrOutput2D_cells(cell** a, int data)
             switch (data)
             {
             case 1: cout << a[i][j].texturetype << " "; break;
-            case 2: cout << setw(3) << a[i][j].rotation << " "; break;
+            case 2: cout << setw(3) << a[i][j].rotation/90 << " "; break;
             case 3: cout << a[i][j].IsActive << " "; break;
             case 4: cout << a[i][j].ways[0] << " "; break;
             case 5: cout << a[i][j].IsAnimating << " "; break;
